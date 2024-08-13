@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Termination extends Model
 {
+	use SoftDeletes;
 	protected $fillable = [
 		'description', 'company_id','terminated_employee','termination_type','termination_date','notice_date','status'
 	];

@@ -15,18 +15,16 @@
 
     </div>
 
-    <div class="container">
-        <div class="table-responsive">
-            <table id="goalTypeTable" class="table">
-                <thead>
-                    <tr>
-                        <th class="not-exported"></th>
-                        <th>@lang('file.Type')</th>
-                        <th class="not-exported">{{trans('file.action')}}</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+    <div class="table-responsive">
+        <table id="goalTypeTable" class="table">
+            <thead>
+                <tr>
+                    <th class="not-exported"></th>
+                    <th>@lang('file.Type')</th>
+                    <th class="not-exported">{{trans('file.action')}}</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </section>
 

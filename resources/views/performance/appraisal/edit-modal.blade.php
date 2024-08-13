@@ -151,7 +151,7 @@
     </div>
   </div>
 
-
+@push('scriptsnew')
   <script>
     $('#companyIdEdit').change(function() {
             var companyIdEdit = $(this).val();
@@ -173,6 +173,8 @@
       });
 
     $('#dateEdit').datepicker({
-      uiLibrary: 'bootstrap4'
+      uiLibrary: 'bootstrap4',
+      format: "dd-mm-yyyy",
   });
 </script>
+@endpush

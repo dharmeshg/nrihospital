@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transfer extends Model
 {
+	use SoftDeletes;
 	protected $fillable = [
 		'description', 'company_id','from_department_id', 'to_department_id','employee_id','transfer_date'
 	];

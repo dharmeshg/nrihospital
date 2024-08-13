@@ -74,7 +74,7 @@
                     <label><b>{{__('file.Progress Bar')}}</b></label>
                     <input type="text" name="progress" id="progressEdit"
                            class="form-control range-slider "
-                           placeholder="{{__('Progress Bar')}}">
+                           placeholder="{{__('Progress Bar')}}" data-ionRangeSlider="0">
                 </div>
 
 
@@ -110,12 +110,15 @@
   </div>
 </div>
 
+@push('scriptsnew')
 <script>
   $('#startDateEdit').datepicker({
-      uiLibrary: 'bootstrap4'
+      uiLibrary: 'bootstrap4',
+      format: "dd-mm-yyyy",
   });
   $('#endDateEdit').datepicker({
-      uiLibrary: 'bootstrap4'
+      uiLibrary: 'bootstrap4',
+      format: "dd-mm-yyyy",
   });
 
   $(".range-slider").ionRangeSlider({
@@ -128,3 +131,4 @@
     skin: "round"
 });
 </script>
+@endpush

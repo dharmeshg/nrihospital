@@ -74,6 +74,7 @@ use App\Http\Controllers\Performance\AppraisalController;
 use App\Http\Controllers\Performance\GoalTrackingController;
 use App\Http\Controllers\Performance\GoalTypeController;
 use App\Http\Controllers\Performance\IndicatorController;
+use App\Http\Controllers\Performance\CompetenciesController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProjectBugController;
@@ -840,6 +841,7 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         });
     });
 
+
     Route::prefix('dynamic_variable')->group(function () {
         Route::post('leave_type/update', [LeaveTypeController::class, 'update'])->name('leave_type.update');
         Route::get('leave_type/{id}/delete', [LeaveTypeController::class, 'destroy'])->name('leave_type.destroy');
@@ -968,8 +970,16 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
     });
 
     //Performance Feature By - Md Irfan Chowdhury
+    Route::resource('/performance/manage-competencies', CompetenciesController::class);
+
+    Route::post('compentencies_type/update', [CompentenciesTypeController::class, 'update'])->name('compentencies_type.update');
+    Route::get('compentencies_type/{id}/delete', [CompentenciesTypeController::class, 'destroy'])->name('compentencies_type.destroy');
+    Route::resource('compentencies_type', CompentenciesTypeController::class)->except(['create', 'update', 'destroy', 'show']);
 
     Route::group(['prefix' => 'performance', 'namespace' => 'Performance'], function () {
+
+        
+
         Route::group(['prefix' => 'goal-type'], function () {
             Route::get('/index', [GoalTypeController::class, 'index'])->name('performance.goal-type.index');
             Route::post('/store', [GoalTypeController::class, 'store'])->name('performance.goal-type.store');

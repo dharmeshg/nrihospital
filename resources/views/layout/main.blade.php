@@ -237,7 +237,7 @@
 </script>
 
 @stack('scripts')
-
+@stack('scriptsnew')
 
 </body>
 </html>

@@ -141,6 +141,7 @@
     </div>
   </div>
 
+@push('scriptsnew')
   <script>
 
     $('#companyIdEdit').change(function() {
@@ -162,3 +163,4 @@
             }
         });
 </script>
+@endpush

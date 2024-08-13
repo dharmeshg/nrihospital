@@ -39,7 +39,7 @@ class IndicatorController extends Controller
                 })
                 ->addColumn('created_at', function ($row)
                 {
-                    return date("d M, Y", strtotime($row->created_at));
+                    return date("d-m-Y", strtotime($row->created_at));
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-success btn-sm"><i class="dripicons-pencil"></i></a> 

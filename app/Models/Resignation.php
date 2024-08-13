@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Resignation extends Model
 {
+	use SoftDeletes;
 	protected $fillable = [
 		'description', 'company_id','department_id','employee_id','resignation_date','notice_date'
 	];

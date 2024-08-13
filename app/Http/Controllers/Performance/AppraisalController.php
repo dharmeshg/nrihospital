@@ -48,7 +48,7 @@ class AppraisalController extends Controller
                 })
                 ->addColumn('date', function ($row)
                 {
-                    return date("d M, Y", strtotime($row->date));;
+                    return date("d-m-Y", strtotime($row->date));
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-success btn-sm"><i class="dripicons-pencil"></i></a>

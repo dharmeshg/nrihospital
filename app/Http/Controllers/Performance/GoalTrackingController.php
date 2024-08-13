@@ -34,11 +34,11 @@ class GoalTrackingController extends Controller
                 })
                 ->addColumn('start_date', function ($row)
                 {
-                    return date("d M, Y", strtotime($row->start_date));
+                    return date("d-m-Y", strtotime($row->start_date));
                 })
                 ->addColumn('end_date', function ($row)
                 {
-                    return date("d M, Y", strtotime($row->end_date));
+                    return date("d-m-Y", strtotime($row->end_date));
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="javascript:void(0)" name="edit" data-id="'.$row->id.'" class="edit btn btn-success btn-sm"><i class="dripicons-pencil"></i></a> 
@@ -134,6 +134,7 @@ class GoalTrackingController extends Controller
                 $goal_tracking->description  = $request->description;
                 $goal_tracking->start_date   = $request->start_date;
                 $goal_tracking->progress     = $request->progress;
+                $goal_tracking->end_date     = $request->end_date;
                 $goal_tracking->status       = $request->status;
                 $goal_tracking->update();
 

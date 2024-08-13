@@ -91,11 +91,15 @@
     </div>
   </div>
 
+@push('scriptsnew')
   <script>
     $('#start_date').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap4',
+        format: "dd-mm-yyyy",
     });
     $('#end_date').datepicker({
-        uiLibrary: 'bootstrap4'
+        uiLibrary: 'bootstrap4',
+        format: "dd-mm-yyyy",
     });
 </script>
+@endpush

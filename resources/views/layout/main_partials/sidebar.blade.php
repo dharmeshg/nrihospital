@@ -193,6 +193,9 @@
                                 </a>
                             @endif
                             <ul id="performance" class="collapse list-unstyled ">
+                                @can('manage-competencies')
+                                    <li id="manage-competencies"><a href="{{route('performance.goal-type.index')}}">{{__('Manage Competencies')}}</a></li>
+                                @endcan
                                 @can('view-goal-type')
                                     <li id="goal-type"><a href="{{route('performance.goal-type.index')}}">{{__('Goal type')}}</a></li>
                                 @endcan

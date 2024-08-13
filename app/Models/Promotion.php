@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Promotion extends Model
 {
+	use SoftDeletes;
 	protected $fillable = [
 		'employee_id', 'company_id', 'promotion_title','description','promotion_date'
 	];
