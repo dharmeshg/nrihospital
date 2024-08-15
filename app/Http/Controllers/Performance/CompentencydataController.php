@@ -1,21 +1,19 @@
 <?php
 
-
 namespace App\Http\Controllers\Performance;
 
-use App\Models\Employee;
-use App\Models\EmployeeLeaveTypeDetail;
-use App\Models\CompentencyType;
+use App\Http\Controllers\Controller;
+use App\Models\Compentency;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class CompentenciesTypeController {
+class CompentencydataController extends Controller{
 
     public function index()
 	{
 		if (request()->ajax())
 		{
-			return datatables()->of(CompentencyType::select('id', 'title')->get())
+			return datatables()->of(Compentency::select('id', 'title')->get())
 				->setRowId(function ($row)
 				{
 					return $row->id;
@@ -23,9 +21,9 @@ class CompentenciesTypeController {
 				->addColumn('action', function ($data)
 				{
 					if (auth()->user()->can('access-compenteny_type')) {
-						$button = '<button type="button" name="edit" id="' . $data->id . '" class="compenteny_type_edit btn btn-primary btn-sm"><i class="dripicons-pencil"></i></button>';
+						$button = '<button type="button" name="edit" id="' . $data->id . '" class="compenteny_type_edit1 btn btn-primary btn-sm"><i class="dripicons-pencil"></i></button>';
 						$button .= '&nbsp;&nbsp;';
-						$button .= '<button type="button" name="delete" id="' . $data->id . '" class="compenteny_type_delete btn btn-danger btn-sm"><i class="dripicons-trash"></i></button>';
+						$button .= '<button type="button" name="delete" id="' . $data->id . '" class="compenteny_type_delete1 btn btn-danger btn-sm"><i class="dripicons-trash"></i></button>';
 
 						return $button;
 					}
@@ -59,8 +57,9 @@ class CompentenciesTypeController {
 
 			$data = [];
 			$data['title'] = $request->get('title');
+			$data['competency_type_id'] = $request->get('type_id');
 
-			CompentencyType::create($data);
+			Compentency::create($data);
 
 			return response()->json(['success' => __('Data Added successfully.')]);
 		}
@@ -74,7 +73,7 @@ class CompentenciesTypeController {
 	{
 		if(request()->ajax())
 		{
-			$data = CompentencyType::findOrFail($id);
+			$data = Compentency::findOrFail($id);
 
 			return response()->json(['data' => $data]);
 		}
@@ -89,9 +88,8 @@ class CompentenciesTypeController {
 			$id = $request->get('hidden_compentency_id');
 
 			$validator = Validator::make($request->only('title_edit'),[
-					'title_edit' => 'required|unique:competency_types,title,'.$id,
+					'title_edit' => 'required|unique:competencies,title,'.$id,
 				]
-
 			);
 
 			if ($validator->fails()) {
@@ -101,7 +99,7 @@ class CompentenciesTypeController {
 			$data = [];
 			$data['title'] = $request->get('title_edit');
 
-			CompentencyType::whereId($id)->update($data);
+			Compentency::whereId($id)->update($data);
 
 			return response()->json(['success' => __('Data is successfully updated')]);
 		}
@@ -117,7 +115,7 @@ class CompentenciesTypeController {
 		$logged_user = auth()->user();
 
 		if ($logged_user->can('access-compenteny_type')) {
-			CompentencyType::whereId($id)->delete();
+			Compentency::whereId($id)->delete();
 			return response()->json(['success' => __('Data is successfully deleted')]);
 		}
 		return abort('403',__('You are not authorized'));

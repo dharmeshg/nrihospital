@@ -1,6 +1,6 @@
-$('#company_type-table').DataTable().clear().destroy();
+$('#compentencies_type-table1').DataTable().clear().destroy();
 
-var table_table = $('#company_type-table').DataTable({
+var table_table = $('#compentencies_type-table1').DataTable({
     initComplete: function () {
         this.api().columns([1]).every(function () {
             var column = this;
@@ -24,24 +24,26 @@ var table_table = $('#company_type-table').DataTable({
     },
     responsive: true,
     fixedHeader: {
-        header: true,
-        footer: true
+    header: true,
+    footer: true
     },
     processing: true,
     serverSide: true,
     ajax: {
-        url: "{{ route('company_type.index') }}",
+    url: "{{ route('compentencies.index') }}",
+
     },
+
     columns: [
-        {
-            data: 'type_name',
-            name: 'type_name',
-        },
-        {
-            data: 'action',
-            name: 'action',
-            orderable: false
-        }
+    {
+        data: 'title',
+        name: 'title',
+    },
+    {
+        data: 'action',
+        name: 'action',
+        orderable: false
+    }
     ],
 
 
@@ -51,84 +53,83 @@ var table_table = $('#company_type-table').DataTable({
         "info": '{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)',
         "search": '{{trans("file.Search")}}',
         'paginate': {
-            'previous': '{{trans("file.Previous")}}',
-            'next': '{{trans("file.Next")}}'
+        'previous': '{{trans("file.Previous")}}',
+        'next': '{{trans("file.Next")}}'
         }
     },
     'columnDefs': [
-        {
-            "orderable": false,
-            'targets': [0, 1],
-        },
+    {
+        "orderable": false,
+        'targets': [0, 1],
+    },
 
     ],
 
-
-    'select': { style: 'multi', selector: 'td:first-child' },
+    'select': {style: 'multi', selector: 'td:first-child'},
     'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
 
 });
 new $.fn.dataTable.FixedHeader(table_table);
 
-
-
-$('#company_type_submit').on('click', function (event) {
+$('#compentencies_type_submit1').on('click', function(event) {
     event.preventDefault();
-    let type_name = $('input[name="type_name"]').val();
+    let title = $('input[name="compentencies_title"]').val();
+    let type_id = $('#compentency_type_id').val();
 
     $.ajax({
-        url: "{{ route('company_type.store') }}",
+        url: "{{ route('compentencies.store') }}",
         method: "POST",
-        data: { type_name: type_name },
+        data: { title:title, type_id:type_id},
         success: function (data) {
-            var html = '';
-            if (data.errors) {
-                html = '<div class="alert alert-danger">';
-                for (var count = 0; count < data.errors.length; count++) {
-                    html += '<p>' + data.errors[count] + '</p>';
-                }
-                html += '</div>';
+        var html = '';
+        if (data.errors) {
+            html = '<div class="alert alert-danger">';
+            for (var count = 0; count < data.errors.length; count++) {
+                html += '<p>' + data.errors[count] + '</p>';
             }
-            if (data.success) {
-                html = '<div class="alert alert-success">' + data.success + '</div>';
-                $('#company_type_form')[0].reset();
-                $('#company_type-table').DataTable().ajax.reload();
-            }
-            $('.company_type_result').html(html).slideDown(300).delay(5000).slideUp(300);
+            html += '</div>';
+        }
+        if (data.success) {
+            html = '<div class="alert alert-success">' + data.success + '</div>';
+            $('#compentencies_type_form1')[0].reset();
+            $("#compentency_type_id")[0].selectedIndex = 0;
+            $('#compentency_type_id').text($("select[name=compentency_type_id] option[value='']").text());
+            $('#compentencies_type-table1').DataTable().ajax.reload();
+        }
+        $('.compentencies_type_result1').html(html).slideDown(300).delay(5000).slideUp(300);
 
         }
     });
 
 });
 
-
-$(document).on('click', '.company_type_edit', function () {
+$(document).on('click', '.compenteny_type_edit1', function(){
     var id = $(this).attr('id');
-    $('.company_type_result').html('');
+    $('.compentencies_type_result').html('');
 
-    var target = "{{ route('company_type.index') }}/" + id + '/edit';
+    var target = "{{ route('compentencies.index') }}/"+id+'/edit';
     $.ajax({
-        url: target,
-        dataType: "json",
-        success: function (html) {
-
-            $('#type_name_edit').val(html.data.type_name);
-
-            $('#hidden_company_type_id').val(html.data.id);
-            $('#CompanyEditModal').modal('show');
+        url:target,     
+        dataType:"json",
+        success:function(html){
+            $('#compentencies_type_edit1').val(html.data.title);
+            $('#hidden_compentency_id1').val(html.data.id);
+            //$('#compentency_type_id1').text($("select[name=compentency_type_id1] option[value='']").text());
+            $('#compentencyEditModal1').modal('show');
         }
     })
 
 });
 
-$('#company_type_edit_submit').on('click', function (event) {
+$('#compentencies_type_edit_submit1').on('click', function(event) {
     event.preventDefault();
-    let type_name_edit = $('input[name="type_name_edit"]').val();
-    let hidden_company_type_id = $('#hidden_company_type_id').val();
+    let title_edit = $('input[name="compentencies_type_edit1"]').val();
+    let hidden_compentency_id= $('#hidden_compentency_id1').val();
+
     $.ajax({
-        url: "{{ route('company_type.update') }}",
+        url: "{{ route('compentencies.update') }}",
         method: "POST",
-        data: { type_name_edit: type_name_edit, hidden_company_type_id: hidden_company_type_id },
+        data: { title_edit:title_edit,hidden_compentency_id:hidden_compentency_id},
         success: function (data) {
             var html = '';
             if (data.errors) {
@@ -140,40 +141,38 @@ $('#company_type_edit_submit').on('click', function (event) {
             }
             if (data.success) {
                 html = '<div class="alert alert-success">' + data.success + '</div>';
-                $('#company_type_form_edit')[0].reset();
-                $('#CompanyEditModal').modal('hide');
-                $('#company_type-table').DataTable().ajax.reload();
+                $('#compentencies_type_form_edit1')[0].reset();
+                $('#compentencies_type-table1').DataTable().ajax.reload();
             }
-            $('.company_type_result_edit').html(html).slideDown(300).delay(3000).slideUp(300);
-            setTimeout(function () {
-                $('#CompanyEditModal').modal('hide')
+            $('.compentency_result_edit1').html(html).slideDown(300).delay(3000).slideUp(300);
+            setTimeout(function(){
+                    $('#compentencyEditModal1').modal('hide')
             }, 5000);
         }
     });
 });
 
 
-
-$(document).on('click', '.company_type_delete', function () {
+$(document).on('click', '.compenteny_type_delete1', function() {
     let delete_id = $(this).attr('id');
-    let target = "{{ route('company_type.index') }}/" + delete_id + '/delete';
+    let target = "{{ route('compentencies.index') }}/" + delete_id + '/delete';
     if (confirm('{{__('Are You Sure you want to delete this data')}}')) {
         $.ajax({
-            url: target,
-            success: function (data) {
-                var html = '';
-                html = '<div class="alert alert-success">' + data.success + '</div>';
-                setTimeout(function () {
-                    $('#company_type-table').DataTable().ajax.reload();
-                }, 2000);
-                $('.company_type_result').html(html).slideDown(300).delay(3000).slideUp(300);
-            }
+        url: target,
+        success: function (data) {
+            var html = '';
+            html = '<div class="alert alert-success">' + data.success + '</div>';
+            setTimeout(function () {
+                $('#compentencies_type-table1').DataTable().ajax.reload();
+            }, 2000);
+            $('.award_result').html(html).slideDown(300).delay(3000).slideUp(300);
+        }
         })
     }
 
 });
 
-$('#company_type_close').on('click', function () {
-    $('#company_type_form')[0].reset();
-    $('#company_type-table').DataTable().ajax.reload();
+$('#compentencies_type_close1').on('click', function() {
+    $('#compentencies_type_form1')[0].reset();
+    $('#compentencies_type-table1').DataTable().ajax.reload();
 });

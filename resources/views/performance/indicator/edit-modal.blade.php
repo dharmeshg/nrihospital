@@ -35,99 +35,32 @@
                 </div>
             </div>
             <br>
-            <div class="row">
-              <div class="col-md-6">
-                  <h5><b>@lang('file.Technical Competencies')</b></h5>
-                  <br>
-
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Customer Experience')</b></label>
-                      <div class="col-sm-6">
-                          <select name="customer_experience" id="customerExperienceEdit"
-                              class="form-control selectpicker dynamic" data-live-search="true"
-                              data-live-search-style="contains">
-                              <option value="None">None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Marketing')</b></label>
-                      <div class="col-sm-6">
-                          <select name="marketing" id="marketingEdit" class="form-control selectpicker dynamic"
-                              data-live-search="true" data-live-search-style="contains">
-                              <option value="None">None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Administration')</b></label>
-                      <div class="col-sm-6">
-                          <select name="administrator" id="administratorEdit"
-                              class="form-control selectpicker dynamic" data-live-search="true"
-                              data-live-search-style="contains">
-                              <option value="None">None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-md-6">
-                  <h5><b>Organizational Competencies</b></h5>
-                  <br>
-
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Professionalism')</b></label>
-                      <div class="col-sm-6">
-                          <select name="professionalism" id="professionalismEdit"
-                              class="form-control selectpicker dynamic" data-live-search="true"
-                              data-live-search-style="contains">
-                              <option value="None" selected>None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Integrity')</b></label>
-                      <div class="col-sm-6">
-                          <select name="integrity" id="integrityEdit" class="form-control selectpicker dynamic"
-                              data-live-search="true" data-live-search-style="contains">
-                              <option value="None">None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-                  <div class="form-group row">
-                      <label for="inputEmail3" class="col-sm-6 col-form-label"><b>@lang('file.Attendance')</b></label>
-                      <div class="col-sm-6">
-                          <select name="attendance" id="attendanceEdit" class="form-control selectpicker dynamic"
-                              data-live-search="true" data-live-search-style="contains">
-                              <option value="None">None</option>
-                              <option value="Beginner">Beginner</option>
-                              <option value="Intermidiate">Intermidiate</option>
-                              <option value="Advanced">Advanced</option>
-                              <option value="Expert/Leader">Expert/Leader</option>
-                          </select>
-                      </div>
-                  </div>
-              </div>
-            </div>
+            @if($compentency_type)
+                @foreach($compentency_type as $ky=>$vl)
+                    @if($vl->compentencies->count() > 0)
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <h5><b>{{ $vl->title ? $vl->title : ''}}</b></h5>
+                            </div>
+                        
+                            @foreach($vl->compentencies as $vlk => $vlkvl)
+                                <div class="col-md-6">
+                                    <label for="inputEmail3" class="col-form-label"><b>{{ $vlkvl->title ? $vlkvl->title : ''}}</b></label>
+                                    <select name="competency_{{$vlkvl->id}}" id="customerExperience"
+                                            class="form-control selectpicker dynamic" data-live-search="true"
+                                            data-live-search-style="contains">
+                                            <option value="None" selected>None</option>
+                                            <option value="Beginner">Beginner</option>
+                                            <option value="Intermidiate">Intermidiate</option>
+                                            <option value="Advanced">Advanced</option>
+                                            <option value="Expert/Leader">Expert/Leader</option>
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                @endforeach
+            @endif
 
         </form>
 

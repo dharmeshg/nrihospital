@@ -75,6 +75,8 @@ use App\Http\Controllers\Performance\GoalTrackingController;
 use App\Http\Controllers\Performance\GoalTypeController;
 use App\Http\Controllers\Performance\IndicatorController;
 use App\Http\Controllers\Performance\CompetenciesController;
+use App\Http\Controllers\Performance\CompentenciesTypeController;
+use App\Http\Controllers\Performance\CompentencydataController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PolicyController;
 use App\Http\Controllers\ProjectBugController;
@@ -969,7 +971,11 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::post('/tasks/update', [ClientTaskController::class, 'update'])->name('clientTask.update');
     });
 
-    //Performance Feature By - Md Irfan Chowdhury
+    Route::post('compentencies/update', [CompentencydataController::class, 'update'])->name('compentencies.update');
+    Route::get('compentencies/{id}/delete', [CompentencydataController::class, 'destroy'])->name('compentencies.destroy');
+    Route::resource('compentencies', CompentencydataController::class)->except(['create', 'update', 'destroy', 'show']);
+
+
     Route::resource('/performance/manage-competencies', CompetenciesController::class);
 
     Route::post('compentencies_type/update', [CompentenciesTypeController::class, 'update'])->name('compentencies_type.update');
@@ -977,8 +983,6 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
     Route::resource('compentencies_type', CompentenciesTypeController::class)->except(['create', 'update', 'destroy', 'show']);
 
     Route::group(['prefix' => 'performance', 'namespace' => 'Performance'], function () {
-
-        
 
         Route::group(['prefix' => 'goal-type'], function () {
             Route::get('/index', [GoalTypeController::class, 'index'])->name('performance.goal-type.index');

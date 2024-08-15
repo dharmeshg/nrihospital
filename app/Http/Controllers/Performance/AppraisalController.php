@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\company;
 use App\Models\Employee;
+use App\Models\CompentencyType;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -61,8 +62,9 @@ class AppraisalController extends Controller
         }
 
         $companies = company::select('id','company_name')->get();
+        $compentency_type = CompentencyType::with('compentencies')->get();
 
-        return view('performance.appraisal.index',compact('companies'));
+        return view('performance.appraisal.index',compact('companies','compentency_type'));
     }
 
     public function getEmployee(Request $request)
@@ -95,6 +97,16 @@ class AppraisalController extends Controller
 
                 $employee = Employee::find($request->employee_id);
 
+                $all_compentency = Compentency::get();
+                $competency_json = [];
+                $data = $request->all();
+
+                foreach ($all_compentency as $key => $value) {
+                    if(array_key_exists("competency_".$value->id, $data)){
+                        $competency_json[$value->id] = $data["competency_".$value->id];
+                    }
+                }
+
                 $appraisal                = new Appraisal();
                 $appraisal->company_id    = $request->company_id;
                 $appraisal->employee_id   = $request->employee_id;
@@ -108,6 +120,7 @@ class AppraisalController extends Controller
                 $appraisal->attendance    = $request->attendance;
                 $appraisal->remarks       = $request->remarks;
                 $appraisal->date          = $request->date;
+                $appraisal->competency_json     = json_encode($competency_json,true);
                 $appraisal->save();
 
                 return response()->json(['success' => '<p><b>Data Saved Successfully.</b></p>']);

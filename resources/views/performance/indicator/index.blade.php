@@ -36,10 +36,6 @@
 @include('performance.indicator.delete-checkbox-confirm-modal')
 
 
-
-
-
-
 @endsection
 
 @push('scripts')

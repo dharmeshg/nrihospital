@@ -6,6 +6,8 @@ use App\Models\company;
 use App\Models\designation;
 use App\Http\Controllers\Controller;
 use App\Models\Indicator;
+use App\Models\Compentency;
+use App\Models\CompentencyType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -52,8 +54,9 @@ class IndicatorController extends Controller
         }
 
         $companies = company::select('id','company_name')->get();
+        $compentency_type = CompentencyType::with('compentencies')->get();
 
-        return view('performance.indicator.index',compact('companies'));
+        return view('performance.indicator.index',compact('companies','compentency_type'));
     }
 
     public function getDesignationByComapny(Request $request)
@@ -85,7 +88,17 @@ class IndicatorController extends Controller
                 }
     
                 $designation = designation::find($request->designation_id);
-    
+
+                $all_compentency = Compentency::get();
+                $competency_json = [];
+                $data = $request->all();
+
+                foreach ($all_compentency as $key => $value) {
+                    if(array_key_exists("competency_".$value->id, $data)){
+                        $competency_json[$value->id] = $data["competency_".$value->id];
+                    }
+                }
+                    
                 $indicator = new Indicator();
                 $indicator->company_id     = $request->company_id;
                 $indicator->designation_id = $designation->id;
@@ -96,6 +109,7 @@ class IndicatorController extends Controller
                 $indicator->professionalism= $request->professionalism;
                 $indicator->integrity      = $request->integrity;
                 $indicator->attendance     = $request->attendance;
+                $indicator->competency_json     = json_encode($competency_json,true);
                 $indicator->added_by       = Auth::user()->username;
                 $indicator->save();
     

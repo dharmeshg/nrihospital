@@ -20,7 +20,7 @@
     <table id="compentencies_type-table" class="table ">
         <thead>
         <tr>
-            <th>{{__('Award name')}}</th>
+            <th>{{__('Compentencies Type')}}</th>
             <th class="not-exported">{{trans('file.action')}}</th>
         </tr>
         </thead>
@@ -42,7 +42,7 @@
             <span class="compentency_result_edit"></span>
 
             <div class="modal-body">
-                <form method="post" id="compentency_type_type_form_edit" class="form-horizontal" enctype="multipart/form-data" >
+                <form method="post" id="compentencies_type_form_edit" class="form-horizontal" enctype="multipart/form-data" >
 
                     @csrf
                     <div class="col-md-4 form-group">

@@ -19,6 +19,7 @@ class Appraisal extends Model
         'professionalism',
         'integrity',
         'attendance',
+        'competency_json',
         'remarks',
         'date',
     ];

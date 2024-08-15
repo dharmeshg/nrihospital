@@ -19,6 +19,7 @@ class Indicator extends Model
         'integrity',
         'attendance',
         'added_by',
+        'competency_json'
     ];
 
     public function designation(){
