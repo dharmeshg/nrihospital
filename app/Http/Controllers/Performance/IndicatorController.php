@@ -122,9 +122,15 @@ class IndicatorController extends Controller
     {
         if ($request->ajax()) {
             $indicator = Indicator::find($request->id);
+            $competency_json = json_decode($indicator->competency_json, true);
             $designations = designation::select('id','designation_name')->where('company_id',$indicator->company_id)->get();
+            if($competency_json){
+                foreach($competency_json as $key => $vl){
+                    $competency['competency_'.$key] = $vl;
+                }
+            }
 
-            return response()->json(['indicator' => $indicator, 'designations' => $designations]);
+            return response()->json(['indicator' => $indicator, 'designations' => $designations, 'competency_json' => $competency]);
         }
     }
 
@@ -137,6 +143,16 @@ class IndicatorController extends Controller
             if ($request->ajax()) {
 
                 $designation = designation::find($request->designation_id);
+
+                $all_compentency = Compentency::get();
+                $competency_json = [];
+                $data = $request->all();
+
+                foreach ($all_compentency as $key => $value) {
+                    if(array_key_exists("competency_".$value->id, $data)){
+                        $competency_json[$value->id] = $data["competency_".$value->id];
+                    }
+                }
     
                 $indicator = Indicator::find($request->indicator_id);
                 $indicator->company_id     = $request->company_id;
@@ -148,6 +164,7 @@ class IndicatorController extends Controller
                 $indicator->professionalism= $request->professionalism;
                 $indicator->integrity      = $request->integrity;
                 $indicator->attendance     = $request->attendance;
+                $appraisal->competency_json     = json_encode($competency_json,true);
                 $indicator->update();
     
                 return response()->json(['success' => '<p><b>Data Updated Successfully.</b></p>']);

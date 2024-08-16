@@ -199,7 +199,10 @@
             // $('#EditformModal').modal('show');
             var appraisalId = $(this).data("id");
             var element = this;
-            console.log(appraisalId)
+            console.log(appraisalId);
+            $('select').selectpicker('destroy');
+            $('select').selectpicker('refresh');
+            $('.selectpicker').selectpicker('refresh');
 
             $.ajax({
                 url: "{{route('performance.appraisal.edit')}}",
@@ -219,6 +222,11 @@
                     $('#employeeIdEdit').selectpicker('val', data.appraisal.employee_id);
                     $('#employeeIdEdit').selectpicker('refresh');
 
+                    $.each(data.competency_json, function (index, value) {
+                        $('#'+index).selectpicker('destroy');
+                        $('#'+index).selectpicker('val', value);
+                        $('#'+index).selectpicker('refresh');
+                    });
 
                     $('#dateEdit').val(data.appraisal.date);
                     $('#customerExperienceEdit').selectpicker('val', data.appraisal.customer_experience);

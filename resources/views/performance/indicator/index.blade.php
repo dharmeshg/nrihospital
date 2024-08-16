@@ -48,7 +48,6 @@
             }
         });
 
-
         var table = $('#indicatorTable').DataTable({
             processing: true,
             serverSide: true,
@@ -197,6 +196,9 @@
             e.preventDefault();
             var indicatorId = $(this).data("id");
             var element = this;
+            $('select').selectpicker('destroy');
+            $('select').selectpicker('refresh');
+            $('.selectpicker').selectpicker('refresh');
 
             $.ajax({
                 url: "{{route('performance.indicator.edit')}}",
@@ -215,6 +217,12 @@
                     $('#designationIdEdit').selectpicker('refresh');
                     $('#designationIdEdit').selectpicker('val', data.indicator.designation_id);
                     $('#designationIdEdit').selectpicker('refresh');
+
+                    $.each(data.competency_json, function (index, value) {
+                        $('#'+index).selectpicker('destroy');
+                        $('#'+index).selectpicker('val', value);
+                        $('#'+index).selectpicker('refresh');
+                    });
 
 
                     $('#customerExperienceEdit').selectpicker('val', data.indicator.customer_experience);

@@ -52,7 +52,7 @@
                             @foreach($vl->compentencies as $vlk => $vlkvl)
                                 <div class="col-md-6">
                                     <label for="inputEmail3" class="col-form-label"><b>{{ $vlkvl->title ? $vlkvl->title : ''}}</b></label>
-                                    <select name="competency_{{$vlkvl->id}}" id="customerExperience"
+                                    <select name="competency_{{$vlkvl->id}}" id="competency_{{$vlkvl->id}}"
                                             class="form-control selectpicker dynamic" data-live-search="true"
                                             data-live-search-style="contains">
                                             <option value="None" selected>None</option>
