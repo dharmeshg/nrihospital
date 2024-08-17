@@ -25,6 +25,18 @@
                     <li class="nav-item">
                         <a class="nav-link " href="#" id="jobExperience-tab" data-toggle="tab" data-table="job_experience" data-target="#jobExperience" role="tab" aria-controls="jobExperience" aria-selected="false">{{__('Job Experience Type')}}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="employeeType-tab" data-toggle="tab" data-table="employee_type" data-target="#employeeType" role="tab" aria-controls="employeeType" aria-selected="false">{{__('Employee Type')}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="costCenter-tab" data-toggle="tab" data-table="cost_center" data-target="#costCenter" role="tab" aria-controls="costCenter" aria-selected="false">{{__('Cost Center')}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="grade-tab" data-toggle="tab" data-table="grade" data-target="#grades" role="tab" aria-controls="grades" aria-selected="false">{{__('Grade')}}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="qualification-tab" data-toggle="tab" data-table="qualification" data-target="#qualifications" role="tab" aria-controls="qualifications" aria-selected="false">{{__('Qualifications')}}</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -79,6 +91,18 @@
 
             <div class="pt-0 tab-pane fade " id="jobExperience" role="tab"  aria-labelledby="jobExperience-tab">
                 @include('settings.variables.partials.job_experience')
+            </div>
+            <div class="pt-0 tab-pane fade " id="employeeType" role="tab"  aria-labelledby="employeeType-tab">
+                @include('settings.variables.partials.employee_type')
+            </div>
+            <div class="pt-0 tab-pane fade " id="costCenter" role="tab"  aria-labelledby="costCenter-tab">
+                @include('settings.variables.partials.cost_center')
+            </div>
+             <div class="pt-0 tab-pane fade " id="grades" role="tab"  aria-labelledby="grade-tab">
+                @include('settings.variables.partials.grade')
+            </div>
+            <div class="pt-0 tab-pane fade " id="qualifications" role="tab"  aria-labelledby="qualification-tab">
+                @include('settings.variables.partials.qualification')
             </div>
         </div>
     </section>
@@ -146,6 +170,22 @@
 
         $('[data-table="job_experience"]').on('click', function (e) {
             @include('settings.variables.JS_DT.job_experience_js')
+        });
+
+        $('[data-table="employee_type"]').on('click', function (e) {
+            @include('settings.variables.JS_DT.employee_type_js')
+        });
+
+        $('[data-table="cost_center"]').on('click', function (e) {
+            @include('settings.variables.JS_DT.cost_center_js')
+        });
+
+        $('[data-table="grade"]').on('click', function (e) {
+            @include('settings.variables.JS_DT.grade_js')
+        });
+
+        $('[data-table="qualification"]').on('click', function (e) {
+            @include('settings.variables.JS_DT.qualification_js')
         });
 
 

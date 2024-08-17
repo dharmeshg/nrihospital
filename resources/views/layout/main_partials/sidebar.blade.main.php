@@ -141,7 +141,7 @@
                                         href="{{route('designations.index')}}">{{trans('file.Designation')}}</a>
                             </li>
                         @endcan
-
+                       
                         {{-- @can('announcement') --}}
                             <li id="announcements"><a href="{{route('announcements.index')}}">{{trans('file.Announcements')}}</a></li>
                         {{-- @endcan --}}

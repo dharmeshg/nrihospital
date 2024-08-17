@@ -15,10 +15,10 @@
         <table id="contact-table" class="table ">
             <thead>
             <tr>
-                <th>{{trans('file.Name')}}</th>
                 <th>{{trans('file.Relation')}}</th>
                 <th>{{trans('file.Email')}}</th>
                 <th>{{trans('file.Phone')}}</th>
+                <th>{{trans('file.Address')}}</th>
                 <th class="not-exported">{{trans('file.action')}}</th>
             </tr>
             </thead>
@@ -55,14 +55,14 @@
                             <div class="col-md-6 form-group">
                                 <label>{{trans('file.Email')}} *</label>
                                 <input type="text" name="work_email" id="contact_work_email"
-                                       placeholder="{{trans('file.Work')}}"
+                                       placeholder="{{trans('file.Email')}}"
                                        class="form-control mb-2">
-                                <input type="text" name="personal_email" id="contact_personal_email"
+                                <!-- <input type="text" name="personal_email" id="contact_personal_email"
                                        placeholder="{{trans('file.Personal')}}"
-                                       required class="form-control">
+                                       required class="form-control"> -->
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="is_primary"
                                            id="contact_is_primary" value="1">
@@ -77,17 +77,40 @@
                                            for="contact_is_dependent">{{trans('file.Dependent')}}</label>
                                 </div>
 
-                            </div>
+                            </div> -->
 
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label>{{trans('file.Name')}} *</label>
                                 <input type="text" name="contact_name" id="contact_name"
                                        placeholder="{{trans('file.Name')}}"
                                        required class="form-control">
-                            </div>
-
+                            </div> -->
                             <div class="col-md-6 form-group">
+                                <label>Mobile Number *</label>
+                                <input type="text" name="work_phone" id="contact_work_phone"
+                                       placeholder="{{__('Mobile Number')}}"
+                                       required class="form-control mb-2">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Emergency Contact *</label>
+                                <input type="text" name="emergency_contact" id="contact_emergency_contact"
+                                       placeholder="{{__('Emergency Contact')}}"
+                                       required class="form-control mb-2">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>Present Address *</label>
+                                <input type="text" name="address_1" id="contact_address_1"
+                                       placeholder="{{__('Present Address')}}"
+                                       required class="form-control mb-2">
+                            </div>
+                             <div class="col-md-6 form-group">
+                                <label>Permanent Address *</label>
+                                <input type="text" name="permanent_address" id="contact_permanent_address"
+                                       placeholder="{{__('Permanent Address')}}"
+                                       required class="form-control mb-2">
+                            </div>
+                            <!-- <div class="col-md-6 form-group">
                                 <label>{{trans('file.Address')}} *</label>
                                 <input type="text" name="address_1" id="contact_address_1"
                                        placeholder="{{__('Address Line 1')}}"
@@ -95,9 +118,9 @@
                                 <input type="text" name="address_2" id="contact_address_2"
                                        placeholder="{{__('Address Line 2')}}"
                                        class="form-control">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label>{{trans('file.Mobile')}} *</label>
                                 <input type="text" name="work_phone" id="contact_work_phone"
                                        placeholder="{{trans('file.Work')}}"
@@ -111,7 +134,7 @@
                                 <input type="text" name="home_phone" id="contact_home_phone"
                                        placeholder="{{trans('file.Home')}}"
                                        class="form-control ">
-                            </div>
+                            </div> -->
 
 
                             <div class="col-md-4 form-group">
@@ -164,9 +187,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 
-    <div class="modal fade confirmModal" role="dialog">
+    <div class="modal fade confirmModal" role="dialog" id="confirmModal">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

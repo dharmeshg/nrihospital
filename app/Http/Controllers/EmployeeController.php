@@ -17,7 +17,13 @@ use App\Models\QualificationLanguage;
 use App\Models\QualificationSkill;
 use App\Models\RelationType;
 use App\Models\status;
+use App\Models\EmployeeType;
 use App\Models\User;
+use App\Models\location;
+use App\Models\Qualification;
+use App\Models\Division;
+use App\Models\CostCenter;
+use App\Models\Grade;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Exception;
 use Illuminate\Http\Request;
@@ -324,18 +330,24 @@ class EmployeeController extends Controller
             $language_skills = QualificationLanguage::select('id', 'name')->get();
             $general_skills = QualificationSkill::select('id', 'name')->get();
             $relationTypes = RelationType::select('id','type_name')->get();
+            $locations = location::select('id','location_name')->get();
+            $employee_type = EmployeeType::select('id','name')->get();
+            $division = Division::select('id','division_name')->get();
+            $qualification = Qualification::select('id','name')->get();
+            $costCenter = CostCenter::select('id','name')->get();
+            $grades = Grade::select('id','name')->get();
             $loanTypes = LoanType::select('id','type_name')->get();
             $deductionTypes = DeductionType::select('id','type_name')->get();
             $roles = Role::where('id', '!=', 3)->where('is_active', 1)->select('id', 'name')->get();
 
             return view('employee.dashboard', compact('employee', 'countries', 'companies',
                 'departments', 'designations', 'statuses', 'office_shifts', 'document_types',
-                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes'));
+                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes','locations','employee_type','grades','costCenter','qualification','division'));
         } else {
             return response()->json(['success' => __('You are not authorized')]);
         }
     }
-
+ 
     public function destroy($id)
     {
         if (! env('USER_VERIFIED')) {
@@ -403,31 +415,52 @@ class EmployeeController extends Controller
 
     public function infoUpdate(Request $request, $employee)
     {
+  
         $logged_user = auth()->user();
 
         if ($logged_user->can('modify-details-employee')) {
             if (request()->ajax()) {
-                $validator = Validator::make($request->only('first_name', 'last_name', 'staff_id', 'email', 'contact_no', 'date_of_birth', 'gender',
-                    'username', 'role_users_id', 'company_id', 'department_id', 'designation_id', 'office_shift_id', 'location_id', 'status_id',
-                    'marital_status', 'joining_date', 'permission_role_id', 'address', 'city', 'state', 'country', 'zip_code', 'total_leave'
+                $validator = Validator::make($request->only('department_id', 'designation_id', 'employee_type', 'location_id', 'staff_id', 'division_name', 'qualification','year_of_completion', 'experience', 'joining_date', 'company_id', 'cost_center', 'role_users_id', 'location_id', 'grade',
+                    'reporting_head', 'reporting_hr', 'gl', 'ctc', 'date_of_regularization'
                 ),
                     [
-                        'first_name' => 'required',
-                        'last_name' => 'required',
-                        'username' => 'required|unique:users,username,'.$employee,
-                        'staff_id' => 'required|numeric|unique:employees,staff_id,'.$employee,
-                        'email' => 'nullable|email|unique:users,email,'.$employee,
-                        'contact_no' => 'required|numeric|unique:users,contact_no,'.$employee,
-                        'date_of_birth' => 'required',
-                        'company_id' => 'required',
+                        // 'first_name' => 'required',
+                        // 'last_name' => 'required',
+                        // 'username' => 'required|unique:users,username,'.$employee,
+                        // 'staff_id' => 'required|numeric|unique:employees,staff_id,'.$employee,
+                        // 'email' => 'nullable|email|unique:users,email,'.$employee,
+                        // 'contact_no' => 'required|numeric|unique:users,contact_no,'.$employee,
+                        // 'date_of_birth' => 'required',
+                        // 'company_id' => 'required',
+                        // 'department_id' => 'required',
+                        // 'designation_id' => 'required',
+                        // 'office_shift_id' => 'required',
+                        // 'role_users_id' => 'required',
+                        // 'total_leave' => 'numeric|min:0',
+                        // 'joining_date' => 'required',
+                        // 'exit_date' => 'nullable',
+
                         'department_id' => 'required',
                         'designation_id' => 'required',
-                        'office_shift_id' => 'required',
-                        'role_users_id' => 'required',
-                        'total_leave' => 'numeric|min:0',
+                        'employee_type' => 'required',
+                        'location_id' => 'required',
+                        'staff_id' => 'required|numeric|unique:employees,staff_id,'.$employee,
+                        'division_name' => 'required',
+                        'qualification' => 'required',
+                        'year_of_completion' => 'required',
+                        'experience' => 'required',
                         'joining_date' => 'required',
-                        'exit_date' => 'nullable',
+                        'company_id' => 'required',
+                        'cost_center' => 'required',
+                        'role_users_id' => 'required',
+                        'grade' => 'required',
+                        'reporting_head' => 'required',
+                        'reporting_hr' => 'required',
+                        'gl' => 'required',
+                        'ctc' => 'required',
+                        'date_of_regularization' => 'required',
                     ]
+
                 );
 
                 if ($validator->fails()) {
@@ -435,31 +468,46 @@ class EmployeeController extends Controller
                 }
 
                 $data = [];
-                $data['first_name'] = $request->first_name;
-                $data['last_name'] = $request->last_name;
+                // $data['first_name'] = $request->first_name;
+                // $data['last_name'] = $request->last_name;
                 $data['staff_id'] = $request->staff_id;
-                $data['date_of_birth'] = $request->date_of_birth;
-                $data['gender'] = $request->gender;
+                // $data['date_of_birth'] = $request->date_of_birth;
+                // $data['gender'] = $request->gender;
+
+                $data['employee_type'] = $request->employee_type;
+                $data['location_id'] = $request->location_id;
+                $data['qualification'] = $request->qualification;
+                $data['year_of_completion'] = $request->year_of_completion;
+                $data['experience'] = $request->experience;
+                $data['cost_center'] = $request->cost_center;
+                $data['grade'] = $request->grade;
+                $data['reporting_head'] = $request->reporting_head;
+                $data['reporting_hr'] = $request->reporting_hr;
+                $data['gl'] = $request->gl;
+                $data['ctc'] = $request->ctc;
+                $data['division_name'] = $request->division_name;
+                $data['date_of_regularization'] = $request->date_of_regularization ? date('Y-m-d', strtotime($request->date_of_regularization)) : null;
+
                 $data['department_id'] = $request->department_id;
                 $data['company_id'] = $request->company_id;
                 $data['designation_id'] = $request->designation_id;
-                $data['office_shift_id'] = $request->office_shift_id;
-                $data['status_id'] = $request->status_id;
-                $data['marital_status'] = $request->marital_status;
+                // $data['office_shift_id'] = $request->office_shift_id;
+                // $data['status_id'] = $request->status_id;
+                // $data['marital_status'] = $request->marital_status;
                 if ($request->joining_date) {
                     $data['joining_date'] = $request->joining_date;
                 }
 
                 $data['exit_date'] = $request->exit_date ? date('Y-m-d', strtotime($request->exit_date)) : null;
-                $data['address'] = $request->address;
-                $data['city'] = $request->city;
-                $data['state'] = $request->state;
-                $data['country'] = $request->country;
-                $data['zip_code'] = $request->zip_code;
+                // $data['address'] = $request->address;
+                // $data['city'] = $request->city;
+                // $data['state'] = $request->state;
+                // $data['country'] = $request->country;
+                // $data['zip_code'] = $request->zip_code;
 
-                $data['email'] = strtolower(trim($request->email));
+                // $data['email'] = strtolower(trim($request->email));
                 $data['role_users_id'] = $request->role_users_id;
-                $data['contact_no'] = $request->contact_no;
+                // $data['contact_no'] = $request->contact_no;
                 
                 $data['is_active'] = 1;
 
@@ -495,6 +543,63 @@ class EmployeeController extends Controller
 
                     return response()->json(['error' => $e->getMessage()]);
                 }
+
+                return response()->json(['success' => __('Data Added successfully.')]);
+            }
+        }
+
+        return response()->json(['success' => __('You are not authorized')]);
+    }
+
+    public function personalInfoUpdate(Request $request, $employee)
+    {
+        $logged_user = auth()->user();
+
+        if ($logged_user->can('modify-details-employee')) {
+            if (request()->ajax()) {
+                $validator = Validator::make($request->only('father_husband_name','blood_group', 'gender', 'pf_no', 'uan_no', 'esi_no','aadhar_no', 'mediciaim_policy_no', 'pan_no'
+                ),
+                    [
+                        'father_husband_name' => 'required',
+                        'gender' => 'required',
+                        // 'date_of_birth' => 'required',
+                        'blood_group' => 'required',
+                        'pf_no' => 'required',
+                        'uan_no' => 'required',
+                        'esi_no' => 'required',
+                        'aadhar_no' => 'required',
+                        'mediciaim_policy_no' => 'required',
+                        'pan_no' => 'required',
+                        // 'bank' => 'required',
+                        // 'account_no' => 'required',
+                        // 'ifsc_no' => 'required',
+                    ]
+
+                );
+
+                if ($validator->fails()) {
+                    return response()->json(['errors' => $validator->errors()->all()]);
+                }
+
+                $data = [];
+
+                $data['father_husband_name'] = $request->father_husband_name;
+                $data['gender'] = $request->gender;
+                $data['date_of_birth'] = $request->date_of_birth;
+                // $data['date_of_birth'] = $request->date_of_birth ? date('Y-m-d', strtotime($request->date_of_birth)) : null;
+                $data['blood_group'] = $request->blood_group;
+                $data['pf_no'] = $request->pf_no;
+                $data['uan_no'] = $request->uan_no;
+                $data['esi_no'] = $request->esi_no;
+                $data['aadhar_no'] = $request->aadhar_no;
+                $data['mediciaim_policy_no'] = $request->mediciaim_policy_no;
+                $data['pan_no'] = $request->pan_no;
+                $data['bank'] = $request->bank;
+                $data['account_no'] = $request->account_no;
+                $data['ifsc_no'] = $request->ifsc_no;
+
+                employee::find($employee)->update($data);
+
 
                 return response()->json(['success' => __('Data Added successfully.')]);
             }

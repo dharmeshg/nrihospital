@@ -121,7 +121,7 @@
                                         href="{{route('designations.index')}}">{{trans('file.Designation')}}</a>
                             </li>
                         @endcan
-
+                         <li id="division"><a href="{{route('division.index')}}">Division</a></li>
                    
                     </ul>
                 </li>

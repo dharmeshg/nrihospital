@@ -36,23 +36,22 @@
         },
 
         columns: [
-
-            {
-                data: 'contact_name',
-                name: 'contact_name',
-            },
             {
                 data: 'relation',
                 name: 'relation',
             },
             {
-                data: 'personal_email',
-                name: 'personal_email',
+                data: 'work_email',
+                name: 'work_email',
             },
 
             {
-                data: 'personal_phone',
-                name: 'personal_phone',
+                data: 'work_phone',
+                name: 'work_phone',
+            },
+            {
+                data: 'address1',
+                name: 'address1',
             },
             {
                 data: 'action',
@@ -117,9 +116,13 @@
                     }
                     if (data.success) {
                         html = '<div class="alert alert-success">' + data.success + '</div>';
-                        $('#contact_sample_form')[0].reset();
-                        $('select').selectpicker('refresh');
-                        $('#contact-table').DataTable().ajax.reload();
+
+                        setTimeout(function () {
+                            $('#ContactformModal').modal('hide');
+                            $('#contact_sample_form')[0].reset();
+                            $('select').selectpicker('refresh');
+                            $('#contact-table').DataTable().ajax.reload();
+                        }, 2000);
                     }
                     $('#contact_form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                 }
@@ -180,15 +183,17 @@
 
                 let id = html.data.id;
 
-                $('#contact_name').val(html.data.contact_name);
+                <!-- $('#contact_name').val(html.data.contact_name); -->
                 $('#contact_work_email').val(html.data.work_email);
-                $('#contact_personal_email').val(html.data.personal_email);
+                <!-- $('#contact_personal_email').val(html.data.personal_email); -->
                 $('#contact_address_1').val(html.data.address1);
-                $('#contact_address_2').val(html.data.address2);
+                <!-- $('#contact_address_2').val(html.data.address2); -->
+                $('#contact_permanent_address').val(html.data.permanent_address);
                 $('#contact_work_phone').val(html.data.work_phone);
-                $('#contact_work_phone_ext').val(html.data.work_phone_ext);
-                $('#contact_personal_phone').val(html.data.personal_phone);
-                $('#contact_home_phone').val(html.data.home_phone);
+                $('#contact_emergency_contact').val(html.data.emergency_contact);
+                <!-- $('#contact_work_phone_ext').val(html.data.work_phone_ext); -->
+                <!-- $('#contact_personal_phone').val(html.data.personal_phone); -->
+                <!-- $('#contact_home_phone').val(html.data.home_phone); -->
                 $('#contact_city').val(html.data.city);
                 $('#contact_state').val(html.data.state);
                 $('#contact_zip').val(html.data.zip);
@@ -221,7 +226,7 @@
 
     $(document).on('click', '.contact_delete', function () {
     contact_delete_id = $(this).attr('id');
-        $('.confirmModal').modal('show');
+        $('#confirmModal').modal('show');
         $('.modal-title').text('{{__('DELETE Record')}}');
         $('.contact-ok').text('{{trans('file.OK')}}');
     });
@@ -230,7 +235,7 @@
     $('.contact-close').click(function () {
         $('#contact_sample_form')[0].reset();
         $('select').selectpicker('refresh');
-    $('.confirmModal').modal('hide');
+    $('#confirmModal').modal('hide');
         $('#contact-table').DataTable().ajax.reload();
     });
 
@@ -243,7 +248,7 @@
             },
             success: function (data) {
                 setTimeout(function () {
-                    $('.confirmModal').modal('hide');
+                    $('#confirmModal').modal('hide');
                     $('#contact-table').DataTable().ajax.reload();
                 }, 2000);
             }

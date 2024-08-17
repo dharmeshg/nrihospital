@@ -65,19 +65,17 @@ class EmployeeContactController extends Controller
 	 */
 	public function store(Request $request, $employee)
 	{
+
 		$logged_user = auth()->user();
 		if ($logged_user->can('store-details-employee')||$logged_user->id==$employee)
 		{
-			$validator = Validator::make($request->only('work_email','relation_type_id','personal_email','contact_name',
-				'work_phone','home_phone','personal_phone','document_file','country'),
+			$validator = Validator::make($request->only('work_email','relation_type_id',
+				'work_phone','country','emergency_contact'),
 				[
-					'personal_email' => 'required|email',
 					'relation_type_id' => 'required',
 					'work_email' => 'email|nullable',
-					'contact_name' => 'required',
-					'personal_phone' => 'required|numeric',
-					'home_phone' => 'nullable|numeric',
 					'work_phone' => 'nullable|numeric',
+					'emergency_contact' => 'nullable|numeric',
 				]
 			);
 
@@ -86,22 +84,24 @@ class EmployeeContactController extends Controller
 			{
 				return response()->json(['errors' => $validator->errors()->all()]);
 			}
-
+ 
 
 			$data = [];
 			$data['relation_type_id'] =  $request->relation_type_id;
 			$data['employee_id'] =  $employee;
-			$data['is_primary'] = $request->is_primary;
-			$data['is_dependent'] = $request->is_dependent;
-			$data['contact_name'] = $request->contact_name;
+			// $data['is_primary'] = $request->is_primary;
+			// $data['is_dependent'] = $request->is_dependent;
+			// $data['contact_name'] = $request->contact_name;
 			$data['work_email'] = $request->work_email;
-			$data['personal_email'] = $request->personal_email;
+			// $data['personal_email'] = $request->personal_email;
 			$data['address1'] = $request->address_1;
-			$data['address2'] = $request->address_2;
+			// $data['address2'] = $request->address_2;
+			$data['permanent_address'] = $request->permanent_address;
 			$data['work_phone'] = $request->work_phone;
-			$data['work_phone_ext'] = $request->work_phone_ext;
-			$data['personal_phone'] = $request->personal_phone;
-			$data['home_phone'] = $request->home_phone;
+			$data['emergency_contact'] = $request->emergency_contact;
+			// $data['work_phone_ext'] = $request->work_phone_ext;
+			// $data['personal_phone'] = $request->personal_phone;
+			// $data['home_phone'] = $request->home_phone;
 			$data['city'] = $request->city;
 			$data['state'] = $request->state;
 			$data['zip'] = $request->zip;
@@ -119,6 +119,7 @@ class EmployeeContactController extends Controller
 
 	public function edit($id)
 	{
+
 		if(request()->ajax())
 		{
 			$data = EmployeeContact::findOrFail($id);
@@ -132,16 +133,13 @@ class EmployeeContactController extends Controller
 		$logged_user = auth()->user();
 		if ($logged_user->can('modify-details-employee')||$logged_user->id==$id)
 		{
-			$validator = Validator::make($request->only( 'work_email','relation_type_id','personal_email','contact_name',
-				'work_phone','home_phone','personal_phone','document_file','country'),
+			$validator = Validator::make($request->only('work_email','relation_type_id',
+				'work_phone','country','emergency_contact'),
 				[
-					'personal_email' => 'required|email',
 					'relation_type_id' => 'required',
-					'work_email' => 'email',
-					'contact_name' => 'required',
-					'personal_phone' => 'required|numeric',
-					'home_phone' => 'nullable|numeric',
+					'work_email' => 'email|nullable',
 					'work_phone' => 'nullable|numeric',
+					'emergency_contact' => 'nullable|numeric',
 				]
 //				,
 //				[
@@ -166,19 +164,21 @@ class EmployeeContactController extends Controller
 
 
 			$data = [];
-
 			$data['relation_type_id'] =  $request->relation_type_id;
-			$data['is_primary'] = $request->is_primary;
-			$data['is_dependent'] = $request->is_dependent;
-			$data['contact_name'] = $request->contact_name;
+
+			// $data['is_primary'] = $request->is_primary;
+			// $data['is_dependent'] = $request->is_dependent;
+			// $data['contact_name'] = $request->contact_name;
 			$data['work_email'] = $request->work_email;
-			$data['personal_email'] = $request->personal_email;
+			// $data['personal_email'] = $request->personal_email;
 			$data['address1'] = $request->address_1;
-			$data['address2'] = $request->address_2;
+			// $data['address2'] = $request->address_2;
+			$data['permanent_address'] = $request->permanent_address;
 			$data['work_phone'] = $request->work_phone;
-			$data['work_phone_ext'] = $request->work_phone_ext;
-			$data['personal_phone'] = $request->personal_phone;
-			$data['home_phone'] = $request->home_phone;
+			$data['emergency_contact'] = $request->emergency_contact;
+			// $data['work_phone_ext'] = $request->work_phone_ext;
+			// $data['personal_phone'] = $request->personal_phone;
+			// $data['home_phone'] = $request->home_phone;
 			$data['city'] = $request->city;
 			$data['state'] = $request->state;
 			$data['zip'] = $request->zip;

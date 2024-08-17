@@ -16,6 +16,7 @@ use App\Http\Controllers\ClientProjectController;
 use App\Http\Controllers\ClientTaskController;
 use App\Http\Controllers\CmsController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
@@ -111,6 +112,10 @@ use App\Http\Controllers\Variables\AssetCategoryController;
 use App\Http\Controllers\Variables\AwardTypeController;
 use App\Http\Controllers\Variables\CompanyTypeController;
 use App\Http\Controllers\Variables\JobExperienceTypeController;
+use App\Http\Controllers\Variables\EmployeeTypeController;
+use App\Http\Controllers\Variables\CostCenterController;
+use App\Http\Controllers\Variables\GradeController;
+use App\Http\Controllers\Variables\QualificationController;
 use App\Http\Controllers\Variables\RelationTypeController;
 use App\Http\Controllers\Variables\DocumentTypeController;
 use App\Http\Controllers\Variables\ExpenseTypeController;
@@ -264,6 +269,7 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
             Route::get('pdf/{id}', [EmployeeController::class, 'employeePDF'])->name('employees.pdf');
             Route::post('{employee}/pension_update', [EmployeeController::class, 'employeesPensionUpdate'])->name('employees.pension_update');
             Route::post('{employee}/infoUpdate', [EmployeeController::class, 'infoUpdate'])->name('employees_basicInfo.update');
+            Route::post('{employee}/personalinfoUpdate', [EmployeeController::class, 'personalInfoUpdate'])->name('employees_personalInfo.update');
         });
 
         Route::prefix('immigrations')->group(function () {
@@ -535,6 +541,14 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::post('companies/update', [CompanyController::class, 'update'])->name('companies.update');
         Route::get('companies/delete/{id}', [CompanyController::class, 'destroy']);
         Route::post('companies/delete/selected', [CompanyController::class, 'delete_by_selection'])->name('mass_delete_companies');
+
+        Route::get('division', [DivisionController::class, 'index'])->name('division.index');
+        Route::post('division', [DivisionController::class, 'store'])->name('division.store');
+        Route::get('division/{id}', [DivisionController::class, 'show'])->name('division.show');
+        Route::get('division/edit/{id}', [DivisionController::class, 'edit'])->name('division.edit');
+        Route::post('division/update', [DivisionController::class, 'update'])->name('division.update');
+        Route::get('division/delete/{id}', [DivisionController::class, 'destroy']);
+        Route::post('division/delete/selected', [DivisionController::class, 'delete_by_selection'])->name('mass_delete_division');
 
         Route::post('departments/update', [DepartmentController::class, 'update'])->name('departments.update');
         Route::resource('departments', DepartmentController::class)->except([
@@ -908,6 +922,22 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::post('job_experience/update', [JobExperienceTypeController::class, 'update'])->name('job_experience.update');
         Route::get('job_experience/{id}/delete', [JobExperienceTypeController::class, 'destroy'])->name('job_experience.destroy');
         Route::resource('job_experience', JobExperienceTypeController::class)->except(['create', 'update', 'destroy', 'show']);
+
+        Route::post('employee_type/update', [EmployeeTypeController::class, 'update'])->name('employee_type.update');
+        Route::get('employee_type/{id}/delete', [EmployeeTypeController::class, 'destroy'])->name('employee_type.destroy');
+        Route::resource('employee_type', EmployeeTypeController::class)->except(['create', 'update', 'destroy', 'show']);
+
+        Route::post('cost_center/update', [CostCenterController::class, 'update'])->name('cost_center.update');
+        Route::get('cost_center/{id}/delete', [CostCenterController::class, 'destroy'])->name('cost_center.destroy');
+        Route::resource('cost_center', CostCenterController::class)->except(['create', 'update', 'destroy', 'show']);
+
+        Route::post('grade/update', [GradeController::class, 'update'])->name('grade.update');
+        Route::get('grade/{id}/delete', [GradeController::class, 'destroy'])->name('grade.destroy');
+        Route::resource('grade', GradeController::class)->except(['create', 'update', 'destroy', 'show']);
+
+        Route::post('qualification/update', [QualificationController::class, 'update'])->name('qualification.update');
+        Route::get('qualification/{id}/delete', [QualificationController::class, 'destroy'])->name('qualification.destroy');
+        Route::resource('qualification', QualificationController::class)->except(['create', 'update', 'destroy', 'show']);
     });
 
     Route::prefix('dynamic_variable_method')->group(function () {
