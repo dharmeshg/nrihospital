@@ -48,7 +48,7 @@
                         <div class="row">
 
                             <div class="col-md-6 form-group">
-                                <label>{{__('Loan Month Year')}} *</label>
+                                <label>{{__('Month Year')}} *</label>
                                 <input class="form-control month_year"  name="month_year" type="text" id="month_year">
                             </div>
 
@@ -64,53 +64,30 @@
                                 </select>
                             </div>
 
-                            <!-- <div class="col-md-6 form-group">
+                            <div class="col-md-6 form-group">
                                 <label>{{trans('file.Title')}} *</label>
                                 <input type="text" name="loan_title" id="loan_title" placeholder={{trans('file.Title')}}
                                         required class="form-control">
                             </div>
- -->                            <div class="col-md-6 form-group">
+                            <div class="col-md-6 form-group">
                                 @if(config('variable.currency_format')=='suffix')
                                     <label>{{__('Amount')}} ({{config('variable.currency')}}) *</label>
                                 @else
-                                    <label>({{config('variable.currency')}}) {{__('Principal Amount')}} *</label>
+                                    <label>({{config('variable.currency')}}) {{__('Amount')}} *</label>
                                 @endif <input type="text" name="loan_amount" id="loan_amount"
                                               placeholder={{trans('file.Amount')}}
                                                       required class="form-control">
                             </div>
 
+
                             <div class="col-md-6 form-group">
-                                <label>{{__('Number of installment (In Month)')}} *</label>
-                                <input type="number" name="loan_time" id="loan_time" placeholder={{__('Number of installment')}}
+                                <label>{{__('Number of installment')}}</label>
+                                <input type="text" name="loan_time" id="loan_time" placeholder={{__('Number of installment')}}
                                         required class="form-control">
                             </div>
 
 
-                            <div class="col-md-6 form-group">
-                                <label>{{__('Interest Rate ( % per year)')}} *</label>
-                                <input type="number" name="interest_rate" id="interest_rate" placeholder={{__('Interest Rate ( % per year)')}}
-                                        required class="form-control">
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>{{__('Interest Amount')}} </label>
-                                <input type="number" name="interest_amount" id="interest_amount" placeholder={{__('Interest Amount')}}
-                                        required class="form-control" readonly>
-                            </div>
-                            
-                            <div class="col-md-6 form-group">
-                                <label>{{__('EMI Amount')}} </label>
-                                <input type="number" name="emi_amount" id="emi_amount" placeholder={{__('EMI Amount')}}
-                                        required class="form-control" readonly>
-                            </div>
-
-                            <div class="col-md-6 form-group">
-                                <label>{{__('Total Amount')}} <small>(Principal Amount + Interest Amount)</small></label>
-                                <input type="number" name="total_amount" id="total_amount" placeholder={{__('Total Amount')}}
-                                        required class="form-control" readonly>
-                            </div>
-
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="reason">{{trans('file.Reason')}}</label>
                                     <textarea class="form-control" name="reason" id="loan_reason"

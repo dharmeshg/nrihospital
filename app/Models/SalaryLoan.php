@@ -13,6 +13,10 @@ class SalaryLoan extends Model
 		return $this->hasOne('App\Models\Employee','id','employee_id');
 	}
 
+	public function getloan(){
+		return $this->hasOne('App\Models\LoanType','id','loan_type_id');
+	}
+
 	public function setStartDateAttribute($value)
 	{
 		$this->attributes['start_date'] = Carbon::createFromFormat(env('Date_Format'), $value)->format('Y-m-d');

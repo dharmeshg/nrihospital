@@ -8,26 +8,6 @@
         todayHighlight: true
     });
 
-    $(document).on('keyup change keydown','#loan_amount, #loan_time, #interest_rate',function(){
-        var loan = $('#loan_amount').val();
-        var inte = $('#interest_rate').val();
-        var time = $('#loan_time').val();
-
-        if (typeof loan === "string" && loan.trim().length === 0 && typeof inte === "string" && inte.trim().length === 0 && typeof time === "string" && time.trim().length === 0) {
-          
-        }else{
-            var loan_year = (time)/12;
-            var $si = (loan * inte * loan_year) / 100;
-            var monthly = $si / time;
-
-            $("#interest_amount").val(parseFloat($si).toFixed(2));
-            var emi = parseFloat(monthly).toFixed(2);
-            $("#emi_amount").val(emi);
-            var total_amt = parseFloat($si) + parseFloat(loan);
-            
-            $("#total_amount").val(total_amt.toFixed(2)); 
-        }
-    });
 
     var table_table = $('#loan-table').DataTable({
         initComplete: function () {
@@ -59,7 +39,7 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: "{{ route('salary_loan.show',$employee->id) }}",
+            url: "{{ route('loan.show') }}",
         },
 
         columns: [
@@ -70,8 +50,8 @@
             {
                 data: null,
                 render: function (data, type, row) {
-                    return '{{__('Loan Type')}}: ' + row.loan_type
-                        + "<br>" + '{{trans('file.Reason')}}: ' + row.reason;
+                    return '{{trans('file.Title')}}:' + row.loan_title + "<br>" + '{{__('Loan Type')}}:' + row.loan_type
+                        + "<br>" + '{{trans('file.Reason')}}:' + row.reason;
                 }
             },
             {
@@ -138,7 +118,7 @@
         event.preventDefault();
         if ($('#loan_action').val() == '{{trans('file.Add')}}') {
             $.ajax({
-                url: "{{ route('salary_loan.store',$employee) }}",
+                url: "{{ route('loan.store',$employee) }}",
                 method: "POST",
                 data: new FormData(this),
                 contentType: false,
@@ -170,7 +150,7 @@
 
         if ($('#loan_action').val() == '{{trans('file.Edit')}}') {
             $.ajax({
-                url: "{{ route('salary_loan.update') }}",
+                url: "{{ route('loan.update') }}",
                 method: "POST",
                 data: new FormData(this),
                 contentType: false,
@@ -197,8 +177,10 @@
                             $('select').selectpicker('refresh');
                             $('#loan-table').DataTable().ajax.reload();
                             $('#loan_sample_form')[0].reset();
-                            $( "#loan_amount" ).prop( "disabled", false );
-                        }, 2000);
+    $( "#loan_amount" ).prop( "disabled", false );
+
+    }, 2000);
+
                     }
                     $('#loan_form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                 }
@@ -211,7 +193,7 @@
 
         var id = $(this).attr('id');
 
-        var target = "{{ route('salary_loan.index') }}/" + id + '/edit';
+        var target = "{{ route('loan.index') }}/" + id + '/edit';
 
 
         $.ajax({
@@ -228,12 +210,9 @@
                 $('#loan_reason').val(html.data.reason);
                 $('#loan_type_id').selectpicker('val', html.data.loan_type_id);
                 $('#loan_amount').val(html.data.loan_amount);
-                $("#loan_amount" ).prop( "disabled", true );
+    $( "#loan_amount" ).prop( "disabled", true );
+
                 $('#loan_hidden_id').val(html.data.id);
-                $('#interest_rate').val(html.data.interest_rate);
-                $('#interest_amount').val(html.data.interest_amount);
-                $('#emi_amount').val(html.data.emi_amount);
-                $('#total_amount').val(html.data.total_amount);
                 $('.modal-title').text('{{trans('file.Edit')}}');
                 $('#loan_action_button').val('{{trans('file.Edit')}}');
                 $('#loan_action').val('{{trans('file.Edit')}}');
