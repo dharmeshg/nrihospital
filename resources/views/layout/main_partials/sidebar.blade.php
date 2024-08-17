@@ -142,6 +142,10 @@
                                         href="{{route('promotions.index')}}">{{trans('file.Promotion')}}</a>
                             </li>
                         @endcan
+
+                        @can('view-award')
+                            <li id="award"><a href="{{route('awards.index')}}">{{trans('file.Award')}}</a></li>
+                        @endcan
                         
                         @can('view-transfer')
                             <li id="transfer"><a href="{{route('transfers.index')}}">{{trans('file.Transfer')}}</a>
