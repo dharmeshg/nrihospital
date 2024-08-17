@@ -46,6 +46,11 @@
                                role="tab" aria-controls="Employee_Core_hr" aria-selected="false">{{__('Core HR')}}</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" id="employee_payslip-tab" data-toggle="tab" href="#Employee_Payslip"
+                               role="tab" aria-controls="Employee_Payslip"
+                               aria-selected="false">{{trans('file.Payslip')}}</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" id="remainingLeaveType-tab" data-toggle="tab" href="#remainingLeaveType"
                                role="tab" aria-controls="remainingLeaveType"
                                aria-selected="false">{{trans('file.Remaining Leave')}}

@@ -11,6 +11,7 @@ Trait TotalSalaryTrait {
 
 	public function totalSalary($employee, $payslip_type , $basic_salary, $allowance_amount, $deduction_amount, $pension_amount, $total_minutes =1){
 
+	
 		if($payslip_type == 'Monthly')
 		{
 			$total = $basic_salary + $allowance_amount + $employee->commissions->sum('commission_amount')

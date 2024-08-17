@@ -25,6 +25,9 @@
                     <li class="nav-item">
                         <a class="nav-link " href="#" id="jobExperience-tab" data-toggle="tab" data-table="job_experience" data-target="#jobExperience" role="tab" aria-controls="jobExperience" aria-selected="false">{{__('Job Experience Type')}}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="Loan_type-tab" data-toggle="tab" data-table="loan_type" data-target="#Loan_type" role="tab" aria-controls="Loan_type" aria-selected="false">{{__('Loan Type')}}</a>
+                    </li>
                 </ul>
             </div>
         </div>
