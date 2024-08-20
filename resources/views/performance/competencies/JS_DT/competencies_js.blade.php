@@ -95,6 +95,7 @@ $('#compentencies_type_submit1').on('click', function(event) {
             $("#compentency_type_id")[0].selectedIndex = 0;
             $('#compentency_type_id').text($("select[name=compentency_type_id] option[value='']").text());
             $('#compentencies_type-table1').DataTable().ajax.reload();
+      
         }
         $('.compentencies_type_result1').html(html).slideDown(300).delay(5000).slideUp(300);
 
@@ -114,7 +115,9 @@ $(document).on('click', '.compenteny_type_edit1', function(){
         success:function(html){
             $('#compentencies_type_edit1').val(html.data.title);
             $('#hidden_compentency_id1').val(html.data.id);
-            //$('#compentency_type_id1').text($("select[name=compentency_type_id1] option[value='']").text());
+            $('#compentency_type_edit_id').selectpicker('destroy');
+            $('#compentency_type_edit_id').selectpicker('val', html.data.competency_type_id);
+            $('#compentency_type_edit_id').selectpicker('refresh');
             $('#compentencyEditModal1').modal('show');
         }
     })
@@ -124,6 +127,7 @@ $(document).on('click', '.compenteny_type_edit1', function(){
 $('#compentencies_type_edit_submit1').on('click', function(event) {
     event.preventDefault();
     let title_edit = $('input[name="compentencies_type_edit1"]').val();
+    let compentency_type_edit_id = $('#compentency_type_edit_id').val();
     let hidden_compentency_id= $('#hidden_compentency_id1').val();
 
     $.ajax({

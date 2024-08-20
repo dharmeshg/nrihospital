@@ -4,20 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use App\Models\SalaryLoan;
+use App\Models\LoanType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SalaryLoanController extends Controller {
+class LoanController extends Controller {
 
-	public function show(Employee $employee)
+	public function show()
 	{
 		$logged_user = auth()->user();
 
-		if ($logged_user->can('view-details-employee'))
+		if ($logged_user->can('view-details-loan'))
 		{
 			if (request()->ajax())
 			{
-				return datatables()->of(SalaryLoan::where('employee_id', $employee->id)->orderByRaw('DATE_FORMAT(first_date, "%y-%m")')->get())
+				return datatables()->of(SalaryLoan::orderByRaw('DATE_FORMAT(first_date, "%y-%m")')->get())
 					->setRowId(function ($loan)
 					{
 						return $loan->id;
@@ -46,7 +47,7 @@ class SalaryLoanController extends Controller {
 					->rawColumns(['action','loan_remaining'])
 					->make(true);
 			}
-			return view('employee.salary.loan.index',compact('employee'));
+			return view('employee.loan.index');
 		}
 
 		return response()->json(['success' => __('You are not authorized')]);

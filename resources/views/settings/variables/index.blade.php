@@ -37,6 +37,9 @@
                     <li class="nav-item">
                         <a class="nav-link " href="#" id="qualification-tab" data-toggle="tab" data-table="qualification" data-target="#qualifications" role="tab" aria-controls="qualifications" aria-selected="false">{{__('Qualifications')}}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="Loan_type-tab" data-toggle="tab" data-table="loan_type" data-target="#Loan_type" role="tab" aria-controls="Loan_type" aria-selected="false">{{__('Loan Type')}}</a>
+                    </li>
                 </ul>
             </div>
         </div>

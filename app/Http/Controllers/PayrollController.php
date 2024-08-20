@@ -209,7 +209,6 @@ class PayrollController extends Controller {
 					})
 					->addColumn('net_salary', function ($row)  use ($first_date)
 					{
-						//payslip_type & basic_salary
 						foreach ($row->salaryBasic as $salaryBasic) {
                             if($salaryBasic->first_date <= $first_date){
                                 $payslip_type = $salaryBasic->payslip_type;
@@ -218,6 +217,7 @@ class PayrollController extends Controller {
                         }
 
                         //Pension Amount
+                        $pension_amount = 0;
                         if ($row->pension_type=="percentage") {
                             $pension_amount =  ($basicsalary * $row->pension_amount) /100;
                         } else {
@@ -251,7 +251,6 @@ class PayrollController extends Controller {
                             //********** Test End*********/
 
                             $total_salary = $this->totalSalary($row, $payslip_type, $basicsalary, $allowance_amount, $deduction_amount, $pension_amount, $total);
-
 
 						}
 

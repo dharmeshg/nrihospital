@@ -95,6 +95,7 @@ use App\Http\Controllers\SalaryBasicController;
 use App\Http\Controllers\SalaryCommissionController;
 use App\Http\Controllers\SalaryDeductionController;
 use App\Http\Controllers\SalaryLoanController;
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\SalaryOtherPaymentController;
 use App\Http\Controllers\SalaryOvertimeController;
 use App\Http\Controllers\SupportTicketCommentController;
@@ -252,6 +253,7 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
     Route::post('/assign_role/{user}', [AssignRoleController::class, 'update'])->name('assign_role');
     Route::post('/mass_assign', [AssignRoleController::class, 'mass_update'])->name('mass_assign_role');
 
+
     Route::prefix('staff')->group(function () {
 
         Route::prefix('employees')->group(function () {
@@ -280,6 +282,15 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
             Route::post('{employee}/store', [EmployeeImmigrationController::class, 'store'])->name('immigrations.store');
             Route::get('{id}/delete', [EmployeeImmigrationController::class, 'destroy'])->name('immigrations.destroy');
             Route::get('document/download/{id}', [EmployeeImmigrationController::class, 'download'])->name('immigrations_document.download');
+        });
+
+        Route::prefix('loan')->group(function () {
+            Route::get('/', [LoanController::class, 'index'])->name('loan.index');
+            Route::get('{id}/edit', [LoanController::class, 'edit'])->name('loan.edit');
+            Route::get('{employee}', [LoanController::class, 'show'])->name('loan.show');
+            Route::post('update', [LoanController::class, 'update'])->name('loan.update');
+            Route::post('{employee}/store', [LoanController::class, 'store'])->name('loan.store');
+            Route::get('{id}/delete', [LoanController::class, 'destroy'])->name('loan.destroy');
         });
         // End
 

@@ -12,6 +12,11 @@
                        aria-controls="Salary_allowance" aria-selected="false">{{trans('file.Allowances')}}</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{route('salary_loan.show',$employee)}}" id="salary_loan-tab"
+                       data-toggle="tab" data-table="salary_loan" data-target="#Salary_loan" role="tab"
+                       aria-controls="Salary_loan" aria-selected="false">{{trans('file.Loan')}}</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{route('salary_commission.show',$employee)}}" id="salary_commission-tab"
                        data-toggle="tab" data-table="salary_commission" data-target="#Salary_commission" role="tab"
                        aria-controls="Salary_commission" aria-selected="false">{{trans('file.Commissions')}}</a>
@@ -109,6 +114,13 @@
                 {{__('Overtime')}}
                 <hr>
                 @include('employee.salary.overtime.index')
+            </div>
+            <div class="tab-pane fade" id="Salary_loan" role="tabpanel" aria-labelledby="Salary_loan-tab">
+                {{__('All Loan')}}
+                <hr>
+
+                @include('employee.salary.loan.index')
+
             </div>
         </div>
     </div>

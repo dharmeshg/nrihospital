@@ -1,7 +1,7 @@
 <div class="container-fluid">
     <div class="card mb-0">
         <div class="card-body">           
-            <h3 class="card-title">{{__('Add Compentencies Type')}}</h3>
+            <h3 class="card-title">{{__('Add Compentencies')}}</h3>
             <form method="post" id="compentencies_type_form1" class="form-horizontal" >
                 @csrf
                 <div class="input-group">
@@ -29,7 +29,7 @@
     <table id="compentencies_type-table1" class="table ">
         <thead>
         <tr>
-            <th>{{__('Compentencies Type')}}</th>
+            <th>{{__('Compentencies')}}</th>
             <th class="not-exported">{{trans('file.action')}}</th>
         </tr>
         </thead>
@@ -54,25 +54,28 @@
                 <form method="post" id="compentencies_type_form_edit1" class="form-horizontal" enctype="multipart/form-data" >
 
                     @csrf
-                    <div class="col-md-6 form-group">
-                        <label>{{__('Compentencies Type')}} *</label>
-                        <input type="text" name="compentencies_type_edit1" id="compentencies_type_edit1"  class="form-control"
-                               placeholder="{{__('Compentencies Type')}}">
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label>{{__('Compentencies')}} *</label>
+                            <input type="text" name="compentencies_type_edit1" id="compentencies_type_edit1"  class="form-control"
+                                   placeholder="{{__('Compentencies')}}">
+                        </div>
 
-                    <div class="col-md-6 form-group">
-                        <select class="form-control" name="compentency_type_edit_id" id="compentency_type_edit_id">
-                           @if($compentency)
-                                <option value="">--Select Compentency Type--</option>
-                                @foreach($compentency as $cmp => $cmpvl)
-                                    <option value="{{$cmpvl->id}}">{{$cmpvl->title}}</option>
-                                @endforeach
-                           @endif
-                        </select>
-                    </div>
-                    <div class="col-md-4 form-group">
-                        <input type="hidden" name="hidden_compentency_id" id="hidden_compentency_id1" />
-                        <input type="submit" name="compentencies_type_edit_submit" id="compentencies_type_edit_submit1" class="btn btn-success" value={{trans("file.Edit")}} />
+                        <div class="col-md-6 form-group">
+                            <label>{{__('Compentency Type')}} *</label>
+                            <select class="form-control" name="compentency_type_edit_id" id="compentency_type_edit_id">
+                               @if($compentency)
+                                    <option value="">--Select Compentency Type--</option>
+                                    @foreach($compentency as $cmp => $cmpvl)
+                                        <option value="{{$cmpvl->id}}">{{$cmpvl->title}}</option>
+                                    @endforeach
+                               @endif
+                            </select>
+                        </div>
+                        <div class="col-md-4 form-group">
+                            <input type="hidden" name="hidden_compentency_id" id="hidden_compentency_id1" />
+                            <input type="submit" name="compentencies_type_edit_submit" id="compentencies_type_edit_submit1" class="btn btn-success" value={{trans("file.Edit")}} />
+                        </div>
                     </div>
                 </form>
             </div>

@@ -496,7 +496,6 @@ class DashboardController extends Controller {
             }
         }
 
-
 		$assigned_tickets = EmployeeTicket::with(['assignedTickets' => function ($query) use ($employee)
 		{
 			$query->where('ticket_status', '=', 'open')->select('id', 'subject', 'ticket_code', 'ticket_status');
@@ -510,8 +509,6 @@ class DashboardController extends Controller {
                 $assigned_tickets_count++;
             }
         }
-
-
 
 		//checking if emoloyee has attendance on current day
 		$employee_attendance = Attendance::where('attendance_date', now()->format('Y-m-d'))
