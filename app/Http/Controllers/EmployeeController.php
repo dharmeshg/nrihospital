@@ -18,6 +18,7 @@ use App\Models\QualificationSkill;
 use App\Models\RelationType;
 use App\Models\status;
 use App\Models\EmployeeType;
+use App\Models\EmployeeReason;
 use App\Models\User;
 use App\Models\location;
 use App\Models\Qualification;
@@ -332,6 +333,7 @@ class EmployeeController extends Controller
             $relationTypes = RelationType::select('id','type_name')->get();
             $locations = location::select('id','location_name')->get();
             $employee_type = EmployeeType::select('id','name')->get();
+            $employee_reason = EmployeeReason::select('id','title')->get();
             $division = Division::select('id','division_name')->get();
             $qualification = Qualification::select('id','name')->get();
             $costCenter = CostCenter::select('id','name')->get();
@@ -342,7 +344,7 @@ class EmployeeController extends Controller
 
             return view('employee.dashboard', compact('employee', 'countries', 'companies',
                 'departments', 'designations', 'statuses', 'office_shifts', 'document_types',
-                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes','locations','employee_type','grades','costCenter','qualification','division'));
+                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes','locations','employee_type','grades','costCenter','qualification','division','employee_reason'));
         } else {
             return response()->json(['success' => __('You are not authorized')]);
         }
@@ -600,6 +602,54 @@ class EmployeeController extends Controller
 
                 employee::find($employee)->update($data);
 
+
+                return response()->json(['success' => __('Data Added successfully.')]);
+            }
+        }
+
+        return response()->json(['success' => __('You are not authorized')]);
+    }
+
+    public function statusUpdate(Request $request, $employee)
+    {
+
+        $logged_user = auth()->user();
+
+        if ($logged_user->can('modify-details-employee')) {
+            if (request()->ajax()) {
+
+                $rules = [
+                    'emp_status_is_active' => 'required',
+                ];
+
+                if ($request->emp_status_is_active === 'In-Active') {
+                    $rules['date_of_relieving'] = 'required';
+                    $rules['emp_status_id'] = 'required';
+                    $rules['emp_reason_id'] = 'required';
+                }
+
+                $validator = Validator::make($request->all(), $rules);
+
+                if ($validator->fails()) {
+                    return response()->json(['errors' => $validator->errors()->all()]);
+                }
+
+                $data = [];
+                $data = [
+                    'emp_status_is_active' => $request->emp_status_is_active,
+                ];
+                
+                if ($request->emp_status_is_active === 'In-Active') {
+                    $data['date_of_relieving'] = $request->date_of_relieving ? date('Y-m-d', strtotime($request->date_of_relieving)) : null;
+                    $data['emp_status_id'] = $request->emp_status_id;
+                    $data['emp_reason_id'] = $request->emp_reason_id;
+                } else {
+                    $data['date_of_relieving'] = null;
+                    $data['emp_status_id'] = null;
+                    $data['emp_reason_id'] = null;
+                }
+
+                employee::find($employee)->update($data);
 
                 return response()->json(['success' => __('Data Added successfully.')]);
             }

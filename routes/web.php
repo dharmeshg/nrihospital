@@ -28,6 +28,7 @@ use App\Http\Controllers\EmployeeAwardController;
 use App\Http\Controllers\EmployeeBankAccountController;
 use App\Http\Controllers\EmployeeComplaintController;
 use App\Http\Controllers\EmployeeContactController;
+use App\Http\Controllers\EmployeeDependentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\EmployeeImmigrationController;
@@ -114,6 +115,7 @@ use App\Http\Controllers\Variables\AwardTypeController;
 use App\Http\Controllers\Variables\CompanyTypeController;
 use App\Http\Controllers\Variables\JobExperienceTypeController;
 use App\Http\Controllers\Variables\EmployeeTypeController;
+use App\Http\Controllers\Variables\EmployeeReasonController;
 use App\Http\Controllers\Variables\CostCenterController;
 use App\Http\Controllers\Variables\GradeController;
 use App\Http\Controllers\Variables\QualificationController;
@@ -272,6 +274,7 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
             Route::post('{employee}/pension_update', [EmployeeController::class, 'employeesPensionUpdate'])->name('employees.pension_update');
             Route::post('{employee}/infoUpdate', [EmployeeController::class, 'infoUpdate'])->name('employees_basicInfo.update');
             Route::post('{employee}/personalinfoUpdate', [EmployeeController::class, 'personalInfoUpdate'])->name('employees_personalInfo.update');
+            Route::post('{employee}/statusUpdate', [EmployeeController::class, 'statusUpdate'])->name('employees_status.update');
         });
 
         Route::prefix('immigrations')->group(function () {
@@ -300,6 +303,15 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::post('contacts/update', [EmployeeContactController::class, 'update'])->name('contacts.update');
         Route::post('contacts/{employee}/store', [EmployeeContactController::class, 'store'])->name('contacts.store');
         Route::get('contacts/{id}/delete', [EmployeeContactController::class, 'destroy'])->name('contacts.destroy');
+
+
+        Route::get('dependents', [EmployeeDependentController::class, 'index'])->name('dependents.index');
+        Route::get('dependents/{id}/edit', [EmployeeDependentController::class, 'edit'])->name('dependents.edit');
+        Route::get('dependents/{employee}', [EmployeeDependentController::class, 'show'])->name('dependents.show');
+        Route::post('dependents/update', [EmployeeDependentController::class, 'update'])->name('dependents.update');
+        Route::post('dependents/{employee}/store', [EmployeeDependentController::class, 'store'])->name('dependents.store');
+        Route::get('dependents/{id}/delete', [EmployeeDependentController::class, 'destroy'])->name('dependents.destroy');
+
 
         // check - EmployeeSocialProfileController
         Route::get('social_profile/{employee}', [EmployeeSocialProfileController::class, 'show'])->name('social_profile.show');
@@ -937,6 +949,10 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::post('employee_type/update', [EmployeeTypeController::class, 'update'])->name('employee_type.update');
         Route::get('employee_type/{id}/delete', [EmployeeTypeController::class, 'destroy'])->name('employee_type.destroy');
         Route::resource('employee_type', EmployeeTypeController::class)->except(['create', 'update', 'destroy', 'show']);
+
+        Route::post('employee_reason/update', [EmployeeReasonController::class, 'update'])->name('employee_reason.update');
+        Route::get('employee_reason/{id}/delete', [EmployeeReasonController::class, 'destroy'])->name('employee_reason.destroy');
+        Route::resource('employee_reason', EmployeeReasonController::class)->except(['create', 'update', 'destroy', 'show']);
 
         Route::post('cost_center/update', [CostCenterController::class, 'update'])->name('cost_center.update');
         Route::get('cost_center/{id}/delete', [CostCenterController::class, 'destroy'])->name('cost_center.destroy');
