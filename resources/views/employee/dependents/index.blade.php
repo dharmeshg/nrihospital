@@ -3,10 +3,10 @@
    <div class="container-fluid">
       @if(auth()->user()->can('store-details-employee') || auth()->user()->id == $employee->id)
       <button type="button" class="btn btn-info" name="create_record" id="create_dependents_record"><i
-         class="fa fa-plus"></i>{{__('Add New')}}</button>
+         class="fa fa-plus"></i>{{__('Add Dependent')}}</button>
       @endif
    </div>
-   <div class="table-responsive">
+   <div class="table-responsive mt-4">
       <table id="dependents-table" class="table ">
          <thead>
             <tr>
@@ -23,7 +23,7 @@
       <div class="modal-dialog modal-dialog-centered">
          <div class="modal-content">
             <div class="modal-header">
-               <h5 id="exampleModalLabel" class="modal-title">{{__('Add New')}}</h5>
+               <h5 id="exampleModalLabel" class="modal-title">{{__('Add Dependent')}}</h5>
                <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="dependents-close"><i class="dripicons-cross"></i></button>
             </div>
             <div class="modal-body">
@@ -41,7 +41,7 @@
                       <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{__('Gender')}} <span class="text-danger">*</span> </label>
-                                <select name="gender" id="dependent_gender"
+                                <select name="gender" id="dependent_gender" required
                                     class="form-control selectpicker"
                                     data-live-search="true"
                                     data-live-search-style="contains"
@@ -65,7 +65,7 @@
                      <div class="col-md-6 form-group">
                             <label>{{__('DOB')}} <span class="text-danger">*</span> </label>
                             <input type="text" name="date_of_birth" id="dependent_d_o_b"
-                               autocomplete="off" class="form-control date">
+                               autocomplete="off" class="form-control date" required>
                          </div>
                      <div class="col-md-6 form-group">
                         <label>{{__('Aadhar No')}} <span class="text-danger">*</span> </label>
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                   </div>
-                  <div class="row">
+                  <div class="row" id="hidden_pf_field" style="display: none;">
                       <div class="col-md-6 form-group">
                         <label>{{__('PF(%)')}} <span class="text-danger">*</span> </label>
                         <input type="text" name="pf" id="dependent_pf"
@@ -107,7 +107,7 @@
          </div>
       </div>
    </div>
-   <div class="modal fade confirmModal" role="dialog" id="confirmModal">
+   <div class="modal fade confirmModal" role="dialog" id="confirmModalDependents">
       <div class="modal-dialog modal-dialog-centered">
          <div class="modal-content">
             <div class="modal-header">

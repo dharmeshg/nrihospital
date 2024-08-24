@@ -18,10 +18,10 @@
                 <tr>
                     <th class="not-exported"></th>
                     <th>{{trans('file.Company')}}</th>
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone')}}</th>
-                    <th>{{trans('file.City')}}</th>
-                    <th>{{trans('file.Country')}}</th>
+                    <!-- <th>{{trans('file.Email')}}</th> -->
+                    <!-- <th>{{trans('file.Phone')}}</th> -->
+                    <!-- <th>{{trans('file.City')}}</th> -->
+                    <!-- <th>{{trans('file.Country')}}</th> -->
                     <th class="not-exported">{{trans('file.action')}}</th>
 
                 </tr>
@@ -50,12 +50,12 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>{{__('Company')}} *</label>
+                                <label>{{__('Company')}} <span class="text-danger">*</span></label>
                                 <input type="text" name="company_name" id="company_name" required class="form-control"
                                        placeholder="should be unique">
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label>{{__('Company Type')}} *</label>
                                 <select name="company_type_id" id="company_type_id" class="form-control selectpicker"
                                         data-live-search="true" data-live-search-style="contains"
@@ -116,15 +116,17 @@
                                 <input type="file" name="company_logo" id="company_logo" class="form-control"
                                        placeholder={{trans("file.Optional")}}>
                                 <span id="store_logo"></span>
+                            </div> -->
+
                             </div>
-
-
-                            <div class="form-group" align="center">
+                            <div class="row">
+                            <div class="col-md-6 form-group">
                                 <input type="hidden" name="action" id="action"/>
                                 <input type="hidden" name="hidden_id" id="hidden_id"/>
                                 <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
                                        value={{trans('file.Add')}} />
                             </div>
+                        </div>
                         </div>
 
                     </form>
@@ -157,7 +159,7 @@
                                         <td id="company_name_id"></td>
                                     </tr>
 
-                                    <tr>
+                                    <!-- <tr>
                                         <th>{{__('Company Type')}}</th>
                                         <td id="company_type"></td>
                                     </tr>
@@ -205,7 +207,7 @@
                                     <tr>
                                         <th>{{trans('file.ZIP')}}</th>
                                         <td id="zip_id"></td>
-                                    </tr>
+                                    </tr> -->
 
 
                                 </table>
@@ -228,8 +230,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h2 class="modal-title">{{trans('file.Confirmation')}}</h2>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
                     <h4 align="center">{{__('Are you sure you want to remove this data?')}}</h4>
@@ -252,7 +254,7 @@
             $(document).ready(function () {
                 $('#company-table').DataTable({
                     initComplete: function () {
-                        this.api().columns([2, 4]).every(function () {
+                        this.api().columns([1]).every(function () {
                             var column = this;
                             var select = $('<select><option value=""></option></select>')
                                 .appendTo($(column.footer()).empty())
@@ -292,23 +294,23 @@
                             name: 'company_name',
 
                         },
-                        {
-                            data: 'email',
-                            name: 'email'
-                        },
-                        {
-                            data: 'contact_no',
-                            name: 'contact_no'
-                        },
+                        // {
+                        //     data: 'email',
+                        //     name: 'email'
+                        // },
+                        // {
+                        //     data: 'contact_no',
+                        //     name: 'contact_no'
+                        // },
 
-                        {
-                            data: 'city',
-                            name: 'city'
-                        },
-                        {
-                            data: 'country',
-                            name: 'country'
-                        },
+                        // {
+                        //     data: 'city',
+                        //     name: 'city'
+                        // },
+                        // {
+                        //     data: 'country',
+                        //     name: 'country'
+                        // },
                         {
                             data: 'action',
                             name: 'action',
@@ -331,7 +333,7 @@
                     'columnDefs': [
                         {
                             "orderable": false,
-                            'targets': [0, 5]
+                            'targets': [0, 2]
                         },
                         {
                             'render': function (data, type, row, meta) {
@@ -414,19 +416,24 @@
                             console.log(data);
                             var html = '';
                             if (data.errors) {
-                                html = '<div class="alert alert-danger">';
+                                // html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
+                                    // html += '<p>' + data.errors[count] + '</p>';
+                                    toastr.error(data.errors[count]);
                                 }
-                                html += '</div>';
+                                // html += '</div>';
                             }
                             if (data.success) {
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
+                                // html = '<div class="alert alert-success">' + data.success + '</div>';
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
                                 $('#company-table').DataTable().ajax.reload();
+                                setTimeout(function() {
+                                    $('#formModal').modal('hide');
+                                }, 2000);
+                                toastr.success(data.success);
                             }
-                            $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                            // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         }
                     })
                 }
@@ -443,19 +450,24 @@
                         success: function (data) {
                             var html = '';
                             if (data.errors) {
-                                html = '<div class="alert alert-danger">';
+                                // html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
-                                    html += '<p>' + data.errors[count] + '</p>';
+                                    // html += '<p>' + data.errors[count] + '</p>';
+                                    toastr.error(data.errors[count]);
                                 }
-                                html += '</div>';
+                                // html += '</div>';
                             }
                             if (data.success) {
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
+                                // html = '<div class="alert alert-success">' + data.success + '</div>';
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
                                 $('#company-table').DataTable().ajax.reload();
+                                setTimeout(function() {
+                                    $('#formModal').modal('hide');
+                                }, 2000);
+                                toastr.success(data.success);
                             }
-                            $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                            // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         }
                     });
                 }
@@ -504,23 +516,23 @@
                     dataType: "json",
                     success: function (result) {
                         $('#company_name_id').html(result.data.company_name);
-                        $('#company_type').html(result.data.company_type.type_name);
-                        $('#trading_name_id').html(result.data.trading_name);
-                        $('#registration_no_id').html(result.data.registration_no);
-                        $('#contact_no_id').html(result.data.contact_no);
-                        $('#email_id').html(result.data.email);
-                        $('#website_id').html(result.data.website);
-                        $('#tax_no_id').html(result.data.tax_no);
-                        $('#address1_id').html(result.data.location.address1);
-                        $('#address2_id').html(result.data.location.address2);
-                        $('#city_id').html(result.data.location.city);
-                        $('#state_id').html(result.data.location.state);
-                        $('#country_id').html(result.data.location.country.name);
-                        $('#zip_id').html(result.data.location.zip);
-                        if (result.data.company_logo) {
-                            $('#logo_id').html("<img src={{ URL::to('/public') }}/uploads/company_logo/" + result.data.company_logo + " width='70'  class='img-thumbnail' />");
-                            $('#logo_id').append("<input type='hidden'  name='hidden_image' value='" + result.data.company_logo + "'  />");
-                        }
+                        // $('#company_type').html(result.data.company_type.type_name);
+                        // $('#trading_name_id').html(result.data.trading_name);
+                        // $('#registration_no_id').html(result.data.registration_no);
+                        // $('#contact_no_id').html(result.data.contact_no);
+                        // $('#email_id').html(result.data.email);
+                        // $('#website_id').html(result.data.website);
+                        // $('#tax_no_id').html(result.data.tax_no);
+                        // $('#address1_id').html(result.data.location.address1);
+                        // $('#address2_id').html(result.data.location.address2);
+                        // $('#city_id').html(result.data.location.city);
+                        // $('#state_id').html(result.data.location.state);
+                        // $('#country_id').html(result.data.location.country.name);
+                        // $('#zip_id').html(result.data.location.zip);
+                        // if (result.data.company_logo) {
+                        //     $('#logo_id').html("<img src={{ URL::to('/public') }}/uploads/company_logo/" + result.data.company_logo + " width='70'  class='img-thumbnail' />");
+                        //     $('#logo_id').append("<input type='hidden'  name='hidden_image' value='" + result.data.company_logo + "'  />");
+                        // }
                         $('#company_modal').modal('show');
                         $('.modal-title').text('{{__('Company Info')}}');
                     }
@@ -553,17 +565,20 @@
                             success: function (data) {
                                 let html = '';
                                 if (data.success) {
-                                    html = '<div class="alert alert-success">' + data.success + '</div>';
+                                    // html = '<div class="alert alert-success">' + data.success + '</div>';
+                                    toastr.success(data.success);
                                 }
                                 if (data.error) {
-                                    html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                    toastr.error(data.error);
                                 }
                                 table.ajax.reload();
                                 table.rows('.selected').deselect();
                                 if (data.errors) {
-                                    html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                    toastr.error(data.error);
                                 }
-                                $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                                // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                             }
 
                         });
@@ -572,6 +587,10 @@
 
                 }
 
+            });
+
+            $('#formModal').on('hidden.bs.modal', function () {
+                $('#sample_form')[0].reset();
             });
 
 
@@ -595,13 +614,15 @@
 
                         let html = '';
                         if (data.success) {
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            // html = '<div class="alert alert-success">' + data.success + '</div>';
+                            toastr.success(data.success);
                         }
                         if (data.error) {
-                            html = '<div class="alert alert-danger">' + data.error + '</div>';
+                            // html = '<div class="alert alert-danger">' + data.error + '</div>';
+                             toastr.error(data.error);
                         }
                         setTimeout(function () {
-                            $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                            // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                             $('#confirmModal').modal('hide');
                             $('#company-table').DataTable().ajax.reload();
                         }, 2000);

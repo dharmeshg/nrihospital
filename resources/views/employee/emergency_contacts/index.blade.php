@@ -11,7 +11,7 @@
     </div>
 
 
-    <div class="table-responsive">
+    <div class="table-responsive mt-4">
         <table id="contact-table" class="table ">
             <thead>
             <tr>
@@ -41,7 +41,7 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>{{trans('file.Relation')}} *</label>
+                                <label>{{trans('file.Relation')}} <span class="text-danger">*</span></label>
                                 <select name="relation_type_id" required id="contact_relation"
                                         class="form-control selectpicker"
                                         data-live-search="true" data-live-search-style="contains"
@@ -53,8 +53,8 @@
                             </div>
 
                             <div class="col-md-6 form-group">
-                                <label>{{trans('file.Email')}} *</label>
-                                <input type="text" name="work_email" id="contact_work_email"
+                                <label>{{trans('file.Email')}} <span class="text-danger">*</span></label>
+                                <input type="email" name="work_email" required id="contact_work_email"
                                        placeholder="{{trans('file.Email')}}"
                                        class="form-control mb-2">
                                 <!-- <input type="text" name="personal_email" id="contact_personal_email"
@@ -87,28 +87,28 @@
                                        required class="form-control">
                             </div> -->
                             <div class="col-md-6 form-group">
-                                <label>Mobile Number *</label>
+                                <label>Mobile Number <span class="text-danger">*</span></label>
                                 <input type="text" name="work_phone" id="contact_work_phone"
                                        placeholder="{{__('Mobile Number')}}"
                                        required class="form-control mb-2">
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Emergency Contact *</label>
+                                <label>Emergency Contact <span class="text-danger">*</span></label>
                                 <input type="text" name="emergency_contact" id="contact_emergency_contact"
                                        placeholder="{{__('Emergency Contact')}}"
                                        required class="form-control mb-2">
                             </div>
                             <div class="col-md-6 form-group">
-                                <label>Present Address *</label>
+                                <label>Present Address <span class="text-danger">*</span></label>
                                 <input type="text" name="address_1" id="contact_address_1"
-                                       placeholder="{{__('Present Address')}}"
-                                       required class="form-control mb-2">
+                                       placeholder="{{__('Present Address')}}" required
+                                        class="form-control mb-2">
                             </div>
                              <div class="col-md-6 form-group">
-                                <label>Permanent Address *</label>
+                                <label>Permanent Address <span class="text-danger">*</span></label>
                                 <input type="text" name="permanent_address" id="contact_permanent_address"
-                                       placeholder="{{__('Permanent Address')}}"
-                                       required class="form-control mb-2">
+                                       placeholder="{{__('Permanent Address')}}" required
+                                        class="form-control mb-2">
                             </div>
                             <!-- <div class="col-md-6 form-group">
                                 <label>{{trans('file.Address')}} *</label>
@@ -140,27 +140,27 @@
                             <div class="col-md-4 form-group">
                                 <label>{{trans('file.City')}} </label>
                                 <input type="text" name="city" id="contact_city" placeholder="{{trans('file.City')}}"
-                                       required class="form-control">
+                                        class="form-control">
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label>{{trans('file.State/Province')}} </label>
                                 <input type="text" name="state" id="contact_state"
                                        placeholder="{{trans('file.State/Province')}}"
-                                       required class="form-control">
+                                        class="form-control">
                             </div>
 
                             <div class="col-md-4 form-group">
                                 <label>{{trans('file.ZIP')}} </label>
                                 <input type="text" name="zip" id="contact_zip" placeholder="{{trans('file.ZIP')}}"
-                                       required class="form-control">
+                                        class="form-control">
                             </div>
 
 
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>{{trans('file.Country')}}</label>
-                                    <select name="country_id" id="contact_country" required
+                                    <select name="country_id" id="contact_country"
                                             class="form-control selectpicker"
                                             data-live-search="true" data-live-search-style="contains"
                                             title='{{__('Selecting',['key'=>trans('file.Country')])}}...'>

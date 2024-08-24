@@ -147,6 +147,8 @@ use App\Http\Controllers\Variables\DeductionTypeController;
 use App\Http\Controllers\Variables\DepositCategoryController;
 use App\Http\Controllers\Variables\LoanTypeController;
 use Illuminate\Support\Facades\File;
+use App\Http\Controllers\ShiftInformationController;
+
 
 
 Auth::routes(['register' => false]);
@@ -275,6 +277,11 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
             Route::post('{employee}/infoUpdate', [EmployeeController::class, 'infoUpdate'])->name('employees_basicInfo.update');
             Route::post('{employee}/personalinfoUpdate', [EmployeeController::class, 'personalInfoUpdate'])->name('employees_personalInfo.update');
             Route::post('{employee}/statusUpdate', [EmployeeController::class, 'statusUpdate'])->name('employees_status.update');
+            Route::post('{employee}/accessabilityUpdate', [EmployeeController::class, 'accessabilityUpdate'])->name('accessability.update');
+
+            Route::post('search/reporting_head', [EmployeeController::class, 'search_reporting_head'])->name('search_reporting_head');
+            Route::post('search/reporting_hr', [EmployeeController::class, 'search_reporting_hr'])->name('search_reporting_hr');
+
         });
 
         Route::prefix('immigrations')->group(function () {
@@ -573,6 +580,23 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
         Route::get('division/delete/{id}', [DivisionController::class, 'destroy']);
         Route::post('division/delete/selected', [DivisionController::class, 'delete_by_selection'])->name('mass_delete_division');
 
+        Route::get('leaveType', [LeaveTypeController::class, 'index_new'])->name('leaveType.index');
+        Route::post('leaveType', [LeaveTypeController::class, 'store_new'])->name('leaveType.store');
+        Route::get('leaveType/edit/{id}', [LeaveTypeController::class, 'edit_new'])->name('leaveType.edit');
+        Route::post('leaveType/update', [LeaveTypeController::class, 'update_new'])->name('leaveType.update');
+        Route::get('leaveType/delete/{id}', [LeaveTypeController::class, 'destroy_new']);
+        Route::post('leaveType/delete/selected', [LeaveTypeController::class, 'delete_by_selection'])->name('mass_delete_leaveType');
+
+        Route::get('shift', [ShiftInformationController::class, 'index'])->name('shift.index');
+        Route::post('shift', [ShiftInformationController::class, 'store'])->name('shift.store');
+        Route::get('shift/edit/{id}', [ShiftInformationController::class, 'edit'])->name('shift.edit');
+        Route::post('shift/update', [ShiftInformationController::class, 'update'])->name('shift.update');
+        Route::get('shift/delete/{id}', [ShiftInformationController::class, 'destroy']);
+        Route::post('shift/delete/selected', [ShiftInformationController::class, 'delete_by_selection'])->name('mass_delete_shift');
+
+
+
+
         Route::post('departments/update', [DepartmentController::class, 'update'])->name('departments.update');
         Route::resource('departments', DepartmentController::class)->except([
             'destroy', 'show', 'create', 'update',
@@ -847,6 +871,9 @@ Route::group(['middleware' => ['XSS','checkDataTable']], function () use ($isCrm
     Route::post('dynamic_dependent/company_employee/{ticket}', [DynamicDependent::class, 'companyEmployee'])->name('company_employee');
     Route::post('dynamic_dependent/get_tax_rate', [DynamicDependent::class, 'getTaxRate'])->name('dynamic_tax_rate');
     Route::post('dynamic_dependent/fetch_candidate', [DynamicDependent::class, 'fetchCandidate'])->name('dynamic_candidate');
+
+    
+
 
     Route::prefix('settings')->group(function () use($isCrmModuleExist) {
         Route::resource('roles', RoleController::class);

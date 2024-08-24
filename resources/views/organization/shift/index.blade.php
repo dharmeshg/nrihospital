@@ -4,7 +4,7 @@
     <section>
         <div class="container-fluid mb-3">
             @can('store-company')
-                <button type="button" class="btn btn-info" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('Add Division')}}</button>
+                <button type="button" class="btn btn-info" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('Add Shift')}}</button>
             @endcan
             @can('delete-company')
                 <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}</button>
@@ -13,11 +13,23 @@
 
 
         <div class="table-responsive">
-            <table id="division-table" class="table ">
+            <table id="shift-table" class="table ">
                 <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>Name</th>
+                    <th>Division</th>
+                    <th>Code</th>
+                    <th>Shift Name</th>
+                    <th>Strat Time</th>
+                    <th>Br.Out Time</th>
+                    <th>Br.In Time</th>
+                    <th>End Time</th>
+                    <th>Grace In</th>
+                    <th>Out</th>
+                    <th>Half Day Hrs</th>
+                    <th>Full Day Hrs</th>
+                    <th>Shift Based</th>
+                    <th>Day Off Shift</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
 
                 </tr>
@@ -33,7 +45,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 id="exampleModalLabel" class="modal-title">{{__('Add Division')}}</h5>
+                    <h5 id="exampleModalLabel" class="modal-title">{{__('Add Shift')}}</h5>
                     <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="close"><i class="dripicons-cross"></i></button>
                 </div>
 
@@ -46,14 +58,82 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <label>{{__('Name')}} <span class="text-danger">*</span></label>
-                                <input type="text" name="division_name" id="division_name" required class="form-control"
-                                       placeholder="Name">
+                                <label>{{__('Division')}} <span class="text-danger">*</span></label>
+                                <select name="division_id" id="division_id" class="form-control selectpicker dynamic"
+                                            data-live-search="true" data-live-search-style="contains"
+                                            data-dependent="department_name"
+                                            title='{{__('Selecting',['key'=>trans('file.Shift')])}}...'>
+                                        @foreach($divisions as $division)
+                                            <option value="{{$division->id}}">{{$division->division_name}}</option>
+                                        @endforeach
+
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Code')}} *</label>
+                                <input type="text" name="code" id="code"  class="form-control"
+                                    placeholder="{{__('Code')}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Shift Name')}} </label>
+                                <input type="text" name="shift_name" id="shift_name"  class="form-control"
+                                    placeholder="{{__('Shift Name')}}">
                             </div>
 
-                        </div>
-                        <div class="row">
-                            <div class=" col-md-12 form-group" >
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Start Time')}} </label>
+                                <input type="time" name="start_time" id="start_time"  class="form-control"
+                                    placeholder="{{__('Start Time')}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('End Time')}} </label>
+                                <input type="time" name="end_time" id="end_time"  class="form-control"
+                                    placeholder="{{__('End Time')}}">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Br.Out Time')}} </label>
+                                <input type="time" name="br_out_time" id="br_out_time"  class="form-control"
+                                    placeholder="{{__('Br.Out Time')}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Br.In Time')}} </label>
+                                <input type="time" name="br_in_time" id="br_in_time"  class="form-control"
+                                    placeholder="{{__('Br.In Time')}}">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Grace In')}} </label>
+                                <input type="text" name="grace_in" id="grace_in" min="0"  class="form-control min"
+                                    placeholder="{{__('Grace In')}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Grace Out')}} </label>
+                                <input type="text" name="grace_out" id="grace_out" min="0"  class="form-control min"
+                                    placeholder="{{__('Grace Out')}}">
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Half Day')}}</label>
+                                <input type="text" name="half_day" id="half_day" min="0"  class="form-control hrs"
+                                    placeholder="{{__('Half Day')}}">
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Full Day')}} </label>
+                                <input type="text" name="full_day" id="full_day" min="0"  class="form-control hrs"
+                                    placeholder="{{__('Full Day')}}">
+                            </div>
+                            <div class="col-md-12 form-group custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" name="shift_based" id="shift_based" value="1" checked="">
+                                <label class="custom-control-label" for="shift_based">Shift Based</label>
+                            </div>
+                            <div class="col-md-12 form-group custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" name="day_off_allowed" id="day_off_allowed" value="1" checked="">
+                                <label class="custom-control-label" for="day_off_allowed">Day Off Allowed</label>
+                            </div>
+
+
+                            <div class="col-md-12  form-group" align="">
                                 <input type="hidden" name="action" id="action"/>
                                 <input type="hidden" name="hidden_id" id="hidden_id"/>
                                 <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
@@ -68,6 +148,7 @@
         </div>
     </div>
 
+ 
 
     <div id="confirmModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
@@ -95,7 +176,7 @@
             "use strict";
 
             $(document).ready(function () {
-                var table_table = $('#division-table').DataTable({
+                var table_table = $('#shift-table').DataTable({
                 initComplete: function () {
                     this.api().columns([1]).every(function () {
                         var column = this;
@@ -122,7 +203,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('division.index') }}",
+                    url: "{{ route('shift.index') }}",
                 },
 
                 columns: [
@@ -137,7 +218,66 @@
                         name: 'division_name',
 
                     },
+                    {
+                        data: 'code',
+                        name: 'code',
 
+                    },
+                    {
+                        data: 'shift_name',
+                        name: 'shift_name',
+
+                    },
+                    {
+                        data: 'start_time',
+                        name: 'start_time',
+
+                    },
+                    {
+                        data: 'br_out_time',
+                        name: 'br_out_time',
+
+                    },
+                    {
+                        data: 'br_in_time',
+                        name: 'br_in_time',
+
+                    },
+                    {
+                        data: 'end_time',
+                        name: 'end_time',
+
+                    },
+                    {
+                        data: 'grace_in',
+                        name: 'grace_in',
+
+                    },
+                    {
+                        data: 'grace_out',
+                        name: 'grace_out',
+
+                    },
+                    {
+                        data: 'half_day',
+                        name: 'half_day',
+
+                    },
+                    {
+                        data: 'full_day',
+                        name: 'full_day',
+
+                    },
+                    {
+                        data: 'shift_based',
+                        name: 'shift_based',
+
+                    },
+                    {
+                        data: 'day_off_allowed',
+                        name: 'day_off_allowed',
+
+                    },
                     {
                         data: 'action',
                         name: 'action',
@@ -220,7 +360,7 @@
             // $(document).on('click', '#create_record', function () {
             $('#create_record').on('click', function () {
                 console.log('Create');
-                $('.modal-title').text('{{__('Add New Divison')}}');
+                $('.modal-title').text('{{__('Add New Shift')}}');
                 $('#action_button').val('{{trans("file.Add")}}');
                 $('#action').val('{{trans("file.Add")}}');
                 $('#store_logo').html('');
@@ -232,7 +372,7 @@
                 event.preventDefault();
                 if ($('#action').val() == '{{trans('file.Add')}}') {
                     $.ajax({
-                        url: "{{ route('division.store') }}",
+                        url: "{{ route('shift.store') }}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -246,19 +386,17 @@
                                 // html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
                                     toastr.error(data.errors[count]);
-                                    // html += '<p>' + data.errors[count] + '</p>';
                                 }
                                 // html += '</div>';
                             }
                             if (data.success) {
-                                // html = '<div class="alert alert-success">' + data.success + '</div>';
+                                toastr.success(data.success);
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
-                                $('#division-table').DataTable().ajax.reload(null, false);
+                                $('#shift-table').DataTable().ajax.reload(null, false);
                                 setTimeout(function() {
                                     $('#formModal').modal('hide');
                                 }, 2000); 
-                                toastr.success(data.success);
                             }
                             // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         }
@@ -267,7 +405,7 @@
 
                 if ($('#action').val() == '{{trans('file.Edit')}}') {
                     $.ajax({
-                        url: "{{ route('division.update') }}",
+                        url: "{{ route('shift.update') }}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -280,16 +418,14 @@
                                 // html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
                                     toastr.error(data.errors[count]);
-                                    // html += '<p>' + data.errors[count] + '</p>';
                                 }
                                 // html += '</div>';
                             }
                             if (data.success) {
-                                // html = '<div class="alert alert-success">' + data.success + '</div>';
+                                toastr.success(data.success);
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
-                                $('#division-table').DataTable().ajax.reload();
-                                toastr.success(data.success);
+                                $('#shift-table').DataTable().ajax.reload();
                             }
                             setTimeout(function() {
                                     $('#formModal').modal('hide');
@@ -305,13 +441,36 @@
                 var id = $(this).attr('id');
                 $('#form_result').html('');
 
-                var target = "{{ url('/organization/division/edit')}}/" + id;
+                var target = "{{ url('/organization/shift/edit')}}/" + id;
 
                 $.ajax({
                     url: target,
                     dataType: "json",
                     success: function (html) {
-                        $('#division_name').val(html.data.division_name);
+                        $('#division_id').val(html.data.division_id).trigger('change');
+                        $('#code').val(html.data.code);
+                        $('#shift_name').val(html.data.shift_name);
+                        $('#start_time').val(html.data.start_time);
+                        $('#end_time').val(html.data.end_time);
+                        $('#br_out_time').val(html.data.br_out_time);
+                        $('#br_in_time').val(html.data.br_in_time);
+                        $('#grace_in').val(html.data.grace_in);
+                        $('#grace_out').val(html.data.grace_out);
+                        $('#half_day').val(html.data.half_day);
+                        $('#full_day').val(html.data.full_day);
+
+                        if (html.data.shift_based == 'Yes') {
+                            $('#shift_based').prop('checked', true);
+                        } else {
+                            $('#shift_based').prop('checked', false);
+                        }
+
+                        if (html.data.day_off_allowed == 'Yes') {
+                            $('#day_off_allowed').prop('checked', true);
+                        } else {
+                            $('#day_off_allowed').prop('checked', false);
+                        }
+
                         $('#hidden_id').val(html.data.id);
                         $('.modal-title').text('{{trans('file.Edit')}}');
                         $('#action_button').val('{{trans('file.Edit')}}');
@@ -323,7 +482,6 @@
 
 
             let lid;
-
             $(document).on('click', '.delete', function () {
                 lid = $(this).attr('id');
                 $('#confirmModal').modal('show');
@@ -334,32 +492,30 @@
 
 
             $(document).on('click', '#bulk_delete', function () {
-                let table = $('#division-table').DataTable();
+                let table = $('#shift-table').DataTable();
                 let id = [];
                 id = table.rows({selected: true}).ids().toArray();
+                console.log(id);
                 if (id.length > 0) {
-                    if (confirm("Are you sure you want to delete the selected division?")) {
+                    if (confirm("Are you sure you want to delete the selected Shift?")) {
                         $.ajax({
-                            url: '{{route('mass_delete_division')}}',
+                            url: '{{route('mass_delete_shift')}}',
                             method: 'POST',
                             data: {
-                                divisionIdArray: id
+                                shiftIdArray: id
                             },
                             success: function (data) {
                                 let html = '';
                                 if (data.success) {
                                     toastr.success(data.success);
-                                    // html = '<div class="alert alert-success">' + data.success + '</div>';
                                 }
                                 if (data.error) {
-                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
                                     toastr.error(data.error);
                                 }
                                 table.ajax.reload();
                                 table.rows('.selected').deselect();
                                 if (data.errors) {
                                     toastr.error(data.error);
-                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
                                 }
                                 // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                             }
@@ -371,9 +527,10 @@
                 }
 
             });
-
             $('#formModal').on('hidden.bs.modal', function () {
                 $('#sample_form')[0].reset();
+                $('#division_id').val('').trigger('change');
+
             });
 
 
@@ -381,12 +538,12 @@
                 $('#sample_form')[0].reset();
                 $('#store_logo').html('');
                 $('#logo_id').html('');
-                $('#division-table').DataTable().ajax.reload();
+                $('#shift-table').DataTable().ajax.reload();
                 $('select').selectpicker('refresh');
             });
 
             $('#ok_button').on('click', function () {
-                var target = "{{ url('/organization/division/delete')}}/" + lid;
+                var target = "{{ url('/organization/shift/delete')}}/" + lid;
                 $.ajax({
                     url: target,
                     beforeSend: function () {
@@ -397,17 +554,15 @@
 
                         let html = '';
                         if (data.success) {
-                            // html = '<div class="alert alert-success">' + data.success + '</div>';
                             toastr.success(data.success);
                         }
                         if (data.error) {
                             toastr.error(data.error);
-                            // html = '<div class="alert alert-danger">' + data.error + '</div>';
                         }
                        setTimeout(function () {
                         // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         $('#confirmModal').modal('hide');
-                        $('#division-table').DataTable().ajax.reload();
+                        $('#shift-table').DataTable().ajax.reload();
                     }, 2000);
                     }
                 })

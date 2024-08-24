@@ -9,7 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeDocumentController extends Controller {
-
+ 
 	public function show(Employee $employee)
 	{
 		$logged_user = auth()->user();
@@ -28,19 +28,13 @@ class EmployeeDocumentController extends Controller {
 					{
 						return $row->DocumentType->document_type;
 					})
-					->addColumn('expiry_date', function ($row)
+					->addColumn('relation', function ($row)
 					{
-						return $row->expiry_date;
+						return $row->relationType->type_name;
 					})
 					->addColumn('title', function ($row)
 					{
-						if ($row->document_file)
-						{
-							return $row->document_title . '<br><h6><a href="' . route('documents_document.download', $row->id) . '">' . trans('file.File') . '</a></h6>';
-						} else
-						{
-							return $row->document_title;
-						}
+					    return '<h6><a href="' . route('documents_document.download', $row->id) . '">' . trans('file.File') . '</a></h6>';
 					})
 					->addColumn('action', function ($data) use ($logged_user,$employee_id)
 					{
@@ -68,13 +62,11 @@ class EmployeeDocumentController extends Controller {
 		$logged_user = auth()->user();
 		if ($logged_user->can('store-details-employee')||$logged_user->id==$employee)
 		{
-			$validator = Validator::make($request->only('document_title', 'document_type_id', 'expiry_date',
-				'description', 'document_file', 'is_notify'),
+			$validator = Validator::make($request->only('relation_type_id', 'document_type_id','document_file', 'is_notify'),
 				[
-					'document_title' => 'required',
+					'relation_type_id' => 'required',
 					'document_type_id' => 'required',
-					'expiry_date' => 'required',
-					'document_file' => 'nullable|file|max:10240|mimes:jpeg,png,jpg,gif,ppt,pptx,doc,docx,pdf',
+					'document_file' => 'required|file|max:10240|mimes:jpeg,png,jpg,gif,ppt,pptx,doc,docx,pdf',
 				]
 //				,
 //				[
@@ -97,11 +89,12 @@ class EmployeeDocumentController extends Controller {
 
 			$data = [];
 
-			$data['document_title'] = $request->document_title;
+			// $data['document_title'] = $request->document_title;
 			$data['employee_id'] = $employee;
 			$data['document_type_id'] = $request->document_type_id;
-			$data ['expiry_date'] = $request->expiry_date;
-			$data ['description'] = $request->description;
+			$data['relation_type_id'] = $request->relation_type_id;
+			// $data ['expiry_date'] = $request->expiry_date;
+			// $data ['description'] = $request->description;
 			$data['is_notify'] = $request->is_notify;
 
 			$file = $request->document_file;
@@ -110,10 +103,9 @@ class EmployeeDocumentController extends Controller {
 
 			if (isset($file))
 			{
-				$file_name = $data['document_title'];
 				if ($file->isValid())
 				{
-					$file_name = $file_name . '.' . time() . '.' . $file->getClientOriginalExtension();
+					$file_name = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 					$file->storeAs('document_documents', $file_name);
 					$data['document_file'] = $file_name;
 				}
@@ -145,12 +137,10 @@ class EmployeeDocumentController extends Controller {
 		$logged_user = auth()->user();
 		if ($logged_user->can('modify-details-employee')||$logged_user->id==$id)
 		{
-			$validator = Validator::make($request->only('document_title', 'document_type_id', 'expiry_date',
-				'description', 'document_file', 'is_notify'),
+			$validator = Validator::make($request->only('relation_type_id', 'document_type_id','document_file', 'is_notify'),
 				[
-					'document_title' => 'required',
+					'relation_type_id' => 'required',
 					'document_type_id' => 'required',
-					'expiry_date' => 'required',
 					'document_file' => 'nullable|file|max:10240|mimes:jpeg,png,jpg,gif,ppt,pptx,doc,docx,pdf',
 				]
 //				,
@@ -174,10 +164,10 @@ class EmployeeDocumentController extends Controller {
 
 			$data = [];
 
-			$data['document_title'] = $request->document_title;
+			$data['relation_type_id'] = $request->relation_type_id;
 			$data['document_type_id'] = $request->document_type_id;
-			$data ['expiry_date'] = $request->expiry_date;
-			$data ['description'] = $request->description;
+			// $data ['expiry_date'] = $request->expiry_date;
+			// $data ['description'] = $request->description;
 			$data['is_notify'] = $request->is_notify;
 
 
@@ -188,10 +178,11 @@ class EmployeeDocumentController extends Controller {
 			if (isset($file))
 			{
 				$this->unlink($id);
-				$file_name = $data['document_title'];
+				// $file_name = $data['document_title'];
 				if ($file->isValid())
 				{
-					$file_name = $file_name . '.' . time() . '.' . $file->getClientOriginalExtension();
+					$file_name = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+					// $file_name = $file_name . '.' . time() . '.' . $file->getClientOriginalExtension();
 					$file->storeAs('document_documents', $file_name);
 					$data['document_file'] = $file_name;
 				}
@@ -252,7 +243,7 @@ class EmployeeDocumentController extends Controller {
 		$file_path = $file->document_file;
 
 		$download_path = public_path("uploads/document_documents/" . $file_path);
-
+		
 		if (file_exists($download_path))
 		{
 			$response = response()->download($download_path);

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use Spatie\Permission\Models\Role;
-
+ 
 
 class LocationController extends Controller
 {
@@ -19,11 +19,11 @@ class LocationController extends Controller
 
 		if(request()->ajax())
 		{
-			return datatables()->of(location::with('Country:id,name','LocationHead:id,first_name,last_name')->latest()->get())
-				->addColumn('country', function ($row)
-				{
-					return $row->Country->name ;
-				})
+			return datatables()->of(location::with('LocationHead:id,first_name,last_name')->latest()->get())
+				// ->addColumn('country', function ($row)
+				// {
+				// 	return $row->Country->name ;
+				// })
 				->addColumn('location_head', function ($row)
 				{
 					return $row->LocationHead->full_name ?? ' ' ;
@@ -56,13 +56,9 @@ class LocationController extends Controller
 		if ($logged_user->can('store-location'))
 		{
 
-			$validator = Validator::make($request->only('location_name', 'location_head', 'address1', 'address2', 'city',
-				'state', 'country', 'zip'),
+			$validator = Validator::make($request->only('location_name', 'location_head'),
 				[
-					'location_name' => 'required|unique:locations,location_name,',
-					'address1' => 'required',
-					'zip' => 'nullable|numeric',
-					'country'=> 'required'
+					'location_name' => 'required|unique:locations,location_name,'
 				]
 			);
 
@@ -80,19 +76,19 @@ class LocationController extends Controller
 			{
 				$data['location_head'] = $request->location_head;
 			}
-			$data ['address1'] = $request->address1;
-			$data ['address2'] = $request->address2;
-			$data ['city'] = $request->city;
-			$data ['state'] = $request->state;
-			$data ['country'] = $request->country;
-			$data ['zip'] = $request->zip;
+			// $data ['address1'] = $request->address1;
+			// $data ['address2'] = $request->address2;
+			// $data ['city'] = $request->city;
+			// $data ['state'] = $request->state;
+			// $data ['country'] = $request->country;
+			// $data ['zip'] = $request->zip;
 
 
 			location::create($data);
 
 			return response()->json(['success' => __('Data Added successfully.')]);
 		}
-		return response()->json(['success' => __('You are not authorized')]);
+		return response()->json(['errors' => __('You are not authorized')]);
 	}
 
 
@@ -107,10 +103,6 @@ class LocationController extends Controller
 	}
 
 
-
-
-
-
 	public function update(Request $request)
 	{
 
@@ -120,8 +112,7 @@ class LocationController extends Controller
 		{
            $id = $request->hidden_id;
 
-			$data = $request->only('location_name', 'location_head', 'address1', 'address2', 'city',
-				'state', 'country', 'zip');
+			$data = $request->only('location_name', 'location_head');
 
 			if ($data['location_head'] == '')
 			{
@@ -129,14 +120,10 @@ class LocationController extends Controller
 			}
 
 
-			$validator = Validator::make($request->only('location_name', 'location_head', 'address1', 'address2', 'city',
-				'state', 'country', 'zip'),
+			$validator = Validator::make($request->only('location_name', 'location_head'),
 				[
 					'location_name' => 'required|unique:locations,location_name,' . $id,
-					'location_head' => 'nullable',
-					'address1' => 'required',
-					'zip' => 'nullable|numeric',
-					'country'=> 'required'
+					'location_head' => 'nullable'
 				]
 			);
 
@@ -147,13 +134,12 @@ class LocationController extends Controller
 				return response()->json(['errors'=>$validator->errors()->all()]);
 			}
 
-
 			location::whereId($id)->update($data);
 
 			return response()->json(['success' => __('Data is successfully updated')]);
 
 		}
-		return response()->json(['success' => __('You are not authorized')]);
+		return response()->json(['errors' => __('You are not authorized')]);
 	}
 
 
@@ -162,17 +148,17 @@ class LocationController extends Controller
 
 		if(!env('USER_VERIFIED'))
 		{
-			return response()->json(['success' => 'This feature is disabled for demo!']);
+			return response()->json(['error' => 'This feature is disabled for demo!']);
 		}
 		$logged_user = auth()->user();
 
 		if ($logged_user->can('delete-location'))
 		{
 		     location::whereId($id)->delete();
-		     return "success";
+		     return response()->json(['success' => 'Location deleted successfully.']);
 
 		}
-		return response()->json(['success' => __('You are not authorized')]);
+		return response()->json(['error' => __('You are not authorized')]);
 	}
 
 
@@ -197,7 +183,7 @@ class LocationController extends Controller
 				return response()->json(['error' => 'Error selected Locations can not be deleted']);
 			}
 		}
-		return response()->json(['success' => __('You are not authorized')]);
+		return response()->json(['error' => __('You are not authorized')]);
 	}
 
 

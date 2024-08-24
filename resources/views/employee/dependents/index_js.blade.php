@@ -168,7 +168,15 @@
         }
     });
 
-
+    function toggleStatusField() {
+        var status = $('input[name="pf_nominee"]:checked').val();
+        if (status === 'Yes') {
+            $('#hidden_pf_field').show();
+        } else {
+            $('#hidden_pf_field').hide();
+            $('input[name="pf"]').val('');
+        }
+    }
     $(document).on('click', '.dependents_edit', function () {
 
         var id = $(this).attr('id');
@@ -183,30 +191,20 @@
 
                 let id = html.data.id;
 
-                $('#dependents_work_email').val(html.data.work_email);
+                $('#dependent_name').val(html.data.name);
+                $('#dependent_d_o_b').val(html.data.date_of_birth);
+                $('#dependent_aadhar_no').val(html.data.aadhar_no);
+                $('#dependent_mediclaim_no').val(html.data.mediclaim_no);
+                $('#dependent_pf').val(html.data.pf);
 
-                $('#dependents_address_1').val(html.data.address1);
-
-                $('#dependents_permanent_address').val(html.data.permanent_address);
-                $('#dependents_work_phone').val(html.data.work_phone);
-                $('#dependents_emergency_dependents').val(html.data.emergency_dependents);
-
-                $('#dependents_city').val(html.data.city);
-                $('#dependents_state').val(html.data.state);
-                $('#dependents_zip').val(html.data.zip);
-                if (html.data.is_primary == 1) {
-                    $('#dependents_is_primary').prop('checked', true);
+                if (html.data.pf_nominee == 'Yes') {
+                    $('#dependent_pf_nominee').prop('checked', true);
                 } else {
-                    $('#dependents_is_primary').prop('checked', false);
-                }
-                if (html.data.is_dependent == 1) {
-                    $('#dependents_is_dependent').prop('checked', true);
-                } else {
-                    $('#dependents_is_dependent').prop('checked', false);
+                    $('#dependent_pf_nominee').prop('checked', false);
                 }
 
-                $('#dependents_relation').selectpicker('val', html.data.relation_type_id);
-                $('#dependents_country').selectpicker('val', html.data.country_id);
+                $('#dependent_relation_type').selectpicker('val', html.data.relation_type_id);
+                $('#dependent_gender').selectpicker('val', html.data.gender);
 
 
                 $('#dependents_hidden_id').val(html.data.id);
@@ -214,16 +212,23 @@
                 $('#dependents_action_button').val('{{trans('file.Edit')}}');
                 $('#dependents_action').val('{{trans('file.Edit')}}');
                 $('#DependentsformModal').modal('show');
+                toggleStatusField();
             }
         })
     });
 
+    $('input[name="pf_nominee"]').change(function () {
+        toggleStatusField();
+    });
+    $(document).ready(function () {
+        toggleStatusField(); 
+    });
 
     let dependents_delete_id;
 
     $(document).on('click', '.dependents_delete', function () {
     dependents_delete_id = $(this).attr('id');
-        $('#confirmModal').modal('show');
+        $('#confirmModalDependents').modal('show');
         $('.modal-title').text('{{__('DELETE Record')}}');
         $('.dependents-ok').text('{{trans('file.OK')}}');
     });
@@ -232,7 +237,7 @@
     $('.dependents-close').click(function () {
         $('#dependents_sample_form')[0].reset();
         $('select').selectpicker('refresh');
-    $('#confirmModal').modal('hide');
+    $('#confirmModalDependents').modal('hide');
         $('#dependents-table').DataTable().ajax.reload();
     });
 
@@ -245,7 +250,7 @@
             },
             success: function (data) {
                 setTimeout(function () {
-                    $('#confirmModal').modal('hide');
+                    $('#confirmModalDependents').modal('hide');
                     $('#dependents-table').DataTable().ajax.reload();
                 }, 2000);
             }

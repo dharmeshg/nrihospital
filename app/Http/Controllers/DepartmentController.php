@@ -65,10 +65,11 @@ class DepartmentController extends Controller {
 
 		if ($logged_user->can('store-department'))
 		{
-			$validator = Validator::make($request->only('department_name', 'company_id', 'department_head'),
+			$validator = Validator::make($request->only('department_name'),
 				[
-					'department_name' => 'required|unique:departments,department_name,NULL,id,company_id,'.$request->company_id,
-					'company_id' => 'required'
+					// 'department_name' => 'required|unique:departments,department_name,NULL,id,company_id,'.$request->company_id,
+					'department_name' => 'required|unique:departments,department_name'
+					// 'company_id' => 'required'
 				]
 			);
 
@@ -82,11 +83,10 @@ class DepartmentController extends Controller {
 			$data = [];
 
 			$data['department_name'] = str_replace('&amp;', '&', $request->department_name);
-			$data['company_id'] = $request->company_id;
-			if($request->employee_id){
-				$data ['department_head'] = $request->employee_id;
-			}
-
+			// $data['company_id'] = $request->company_id;
+			// if($request->employee_id){
+			// 	$data ['department_head'] = $request->employee_id;
+			// }
 
 			department::create($data);
 
@@ -130,13 +130,14 @@ class DepartmentController extends Controller {
 		{
 			$id = $request->hidden_id;
 
-			$data = $request->only('department_name', 'company_id', 'department_head');
+			$data = $request->only('department_name');
 
 
-			$validator = Validator::make($request->only('department_name', 'company_id', 'location_id'),
+			$validator = Validator::make($request->only('department_name'),
 				[
-					'department_name' => 'required|unique:departments,department_name,'. $id .',id,company_id,'.$request->company_id,
-					'company_id' => 'required'
+					// 'department_name' => 'required|unique:departments,department_name,'. $id .',id,company_id,'.$request->company_id,
+					 'department_name' => 'required|unique:departments,department_name,' . $id . ',id',
+					// 'company_id' => 'required'
 				]
 			);
 
@@ -150,14 +151,14 @@ class DepartmentController extends Controller {
 			$data = [];
 
 			$data['department_name'] = $request->department_name;
-			$data['company_id'] = $request->company_id;
-			if($request->employee_id)
-			{
-				$data ['department_head'] = $request->employee_id;
-			}
-			else{
-				$data ['department_head'] = NULL;
-			}
+			// $data['company_id'] = $request->company_id;
+			// if($request->employee_id)
+			// {
+			// 	$data ['department_head'] = $request->employee_id;
+			// }
+			// else{
+			// 	$data ['department_head'] = NULL;
+			// }
 
 			department::whereId($id)->update($data);
 

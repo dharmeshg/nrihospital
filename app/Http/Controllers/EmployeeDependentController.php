@@ -70,17 +70,21 @@ class EmployeeDependentController extends Controller
 		$logged_user = auth()->user();
 		if ($logged_user->can('store-details-employee')||$logged_user->id==$employee)
 		{
-			$validator = Validator::make($request->only('name','relation_type_id',
-				'gender','date_of_birth','aadhar_no','mediclaim_no'),
-				[
-					'name' => 'required',
-					'relation_type_id' => 'required',
-					'gender' => 'required',
+	
+			$rules = [
+                    'name' => 'required',
+                    'relation_type_id' => 'required',
+                    'gender' => 'required',
 					'date_of_birth' => 'required',
 					'aadhar_no' => 'required|numeric',
 					'mediclaim_no' => 'required|numeric',
-				]
-			);
+            ];
+
+            if ($request->pf_nominee === 'Yes') {
+                $rules['pf'] = 'required|numeric';
+            }
+
+            $validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails())
 			{
@@ -97,7 +101,14 @@ class EmployeeDependentController extends Controller
 			$data['aadhar_no'] = $request->aadhar_no;
 			$data['mediclaim_no'] = $request->mediclaim_no;
 			$data['pf_nominee'] = $request->pf_nominee ? 'Yes' : 'No';
-			$data['pf'] = $request->pf;
+
+			if ($request->pf_nominee === 'Yes') {
+                   $data['pf'] = $request->pf;
+            }
+            else
+            {
+                $data['pf'] = null;
+            }
 
 			EmployeeDependent::create($data);
 
@@ -123,61 +134,47 @@ class EmployeeDependentController extends Controller
 		$logged_user = auth()->user();
 		if ($logged_user->can('modify-details-employee')||$logged_user->id==$id)
 		{
-			$validator = Validator::make($request->only('work_email','relation_type_id',
-				'work_phone','country','emergency_contact'),
-				[
-					'relation_type_id' => 'required',
-					'work_email' => 'email|nullable',
-					'work_phone' => 'nullable|numeric',
-					'emergency_contact' => 'nullable|numeric',
-				]
-//				,
-//				[
-//					'personal_email.required' => 'Personal Email is required',
-//					'personal_email.email' => 'Incorrect Email format',
-//					'relation.required' => 'Please select document Type',
-//					'work_email.email' => 'Incorrect Email format',
-//					'name.required' => 'Name is required',
-//					'personal_phone.required' => 'Personal Phone is required',
-//					'personal_phone.numeric' => 'Personal Phone is required',
-//					'home_phone.required' => 'Home Phone is required',
-//					'home_phone.numeric' => 'Home Phone is required',
-//					'work_phone.required' => 'Work Phone is required',
-//					'work_phone.numeric' => 'Work Phone is required',
-//				]
-			);
+			$rules = [
+                    'name' => 'required',
+                    'relation_type_id' => 'required',
+                    'gender' => 'required',
+					'date_of_birth' => 'required',
+					'aadhar_no' => 'required|numeric',
+					'mediclaim_no' => 'required|numeric',
+            ];
+
+            if ($request->pf_nominee === 'Yes') {
+                $rules['pf'] = 'required|numeric';
+            }
+
+            $validator = Validator::make($request->all(), $rules);
 
 			if ($validator->fails())
 			{
 				return response()->json(['errors' => $validator->errors()->all()]);
 			}
 
-
 			$data = [];
+			$data['name'] =  $request->name;
 			$data['relation_type_id'] =  $request->relation_type_id;
+			$data['gender'] = $request->gender;
+			$data['date_of_birth'] = $request->date_of_birth ? date('Y-m-d', strtotime($request->date_of_birth)) : null;
+			$data['aadhar_no'] = $request->aadhar_no;
+			$data['mediclaim_no'] = $request->mediclaim_no;
+			$data['pf_nominee'] = $request->pf_nominee ? 'Yes' : 'No';
 
-			// $data['is_primary'] = $request->is_primary;
-			// $data['is_dependent'] = $request->is_dependent;
-			// $data['contact_name'] = $request->contact_name;
-			$data['work_email'] = $request->work_email;
-			// $data['personal_email'] = $request->personal_email;
-			$data['address1'] = $request->address_1;
-			// $data['address2'] = $request->address_2;
-			$data['permanent_address'] = $request->permanent_address;
-			$data['work_phone'] = $request->work_phone;
-			$data['emergency_contact'] = $request->emergency_contact;
-			// $data['work_phone_ext'] = $request->work_phone_ext;
-			// $data['personal_phone'] = $request->personal_phone;
-			// $data['home_phone'] = $request->home_phone;
-			$data['city'] = $request->city;
-			$data['state'] = $request->state;
-			$data['zip'] = $request->zip;
-			$data['country_id'] =  $request->country_id;
+			if ($request->pf_nominee === 'Yes') {
+                   $data['pf'] = $request->pf;
+            }
+            else
+            {
+                $data['pf'] = null;
+            }
 
-			EmployeeContact::whereId($id)->update($data);
+			EmployeeDependent::whereId($id)->update($data);
 
 			return response()->json(['success' => __('Data is successfully updated')]);
-		} else
+		 } else
 		{
 
 			return response()->json(['success' => __('You are not authorized')]);
@@ -195,7 +192,7 @@ class EmployeeDependentController extends Controller
 		$logged_user = auth()->user();
 		if ($logged_user->can('modify-details-employee')||$logged_user->id==$id)
 		{
-			EmployeeContact::whereId($id)->delete();
+			EmployeeDependent::whereId($id)->delete();
 			return response()->json(['success' => __('Data is successfully deleted')]);
 		}
 

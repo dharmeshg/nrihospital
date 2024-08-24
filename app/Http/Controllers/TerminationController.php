@@ -30,7 +30,9 @@ class TerminationController extends Controller
                         return $row->company->company_name ?? ' ';
                     })
                     ->addColumn('terminated_employee', function ($row) {
-                        return $row->employee->full_name;
+                        // return $row->employee->full_name;
+						return $row->employee ? $row->employee->full_name : '-';
+
                     })
                     ->addColumn('action', function ($data) {
                         $button = '<button type="button" name="show" id="'.$data->id.'" class="show_new btn btn-success btn-sm"><i class="dripicons-preview"></i></button>';

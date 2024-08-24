@@ -83,14 +83,14 @@ $('#company_type_submit').on('click', function (event) {
         success: function (data) {
             var html = '';
             if (data.errors) {
-                html = '<div class="alert alert-danger">';
+                <!-- html = '<div class="alert alert-danger">'; -->
                 for (var count = 0; count < data.errors.length; count++) {
-                    html += '<p>' + data.errors[count] + '</p>';
+                    toastr.error(data.errors[count]);
                 }
-                html += '</div>';
+                <!-- html += '</div>'; -->
             }
             if (data.success) {
-                html = '<div class="alert alert-success">' + data.success + '</div>';
+                toastr.success(data.success);
                 $('#company_type_form')[0].reset();
                 $('#company_type-table').DataTable().ajax.reload();
             }
@@ -132,14 +132,14 @@ $('#company_type_edit_submit').on('click', function (event) {
         success: function (data) {
             var html = '';
             if (data.errors) {
-                html = '<div class="alert alert-danger">';
+                <!-- html = '<div class="alert alert-danger">'; -->
                 for (var count = 0; count < data.errors.length; count++) {
-                    html += '<p>' + data.errors[count] + '</p>';
+                    toastr.error(data.errors[count]);
                 }
-                html += '</div>';
+                <!-- html += '</div>'; -->
             }
             if (data.success) {
-                html = '<div class="alert alert-success">' + data.success + '</div>';
+                toastr.success(data.success);
                 $('#company_type_form_edit')[0].reset();
                 $('#CompanyEditModal').modal('hide');
                 $('#company_type-table').DataTable().ajax.reload();
@@ -162,7 +162,7 @@ $(document).on('click', '.company_type_delete', function () {
             url: target,
             success: function (data) {
                 var html = '';
-                html = '<div class="alert alert-success">' + data.success + '</div>';
+                toastr.success(data.success);
                 setTimeout(function () {
                     $('#company_type-table').DataTable().ajax.reload();
                 }, 2000);

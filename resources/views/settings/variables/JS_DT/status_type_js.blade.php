@@ -85,18 +85,18 @@ data: { status_title:status_title},
 success: function (data) {
 var html = '';
 if (data.errors) {
-html = '<div class="alert alert-danger">';
+<!-- html = '<div class="alert alert-danger">'; -->
     for (var count = 0; count < data.errors.length; count++) {
-    html += '<p>' + data.errors[count] + '</p>';
+    toastr.error(data.errors[count]);
     }
-    html += '</div>';
+    <!-- html += '</div>'; -->
 }
 if (data.success) {
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 $('#status_type_form')[0].reset();
 $('#status_type-table').DataTable().ajax.reload();
 }
-$('.status_result').html(html).slideDown(300).delay(5000).slideUp(300);
+<!-- $('.status_result').html(html).slideDown(300).delay(5000).slideUp(300); -->
 }
 });
 
@@ -133,14 +133,14 @@ data: { status_title_edit:status_title_edit,hidden_status_id:hidden_status_id},
 success: function (data) {
 var html = '';
 if (data.errors) {
-html = '<div class="alert alert-danger">';
+<!-- html = '<div class="alert alert-danger">'; -->
     for (var count = 0; count < data.errors.length; count++) {
-    html += '<p>' + data.errors[count] + '</p>';
+    toastr.error(data.errors[count]);
     }
-    html += '</div>';
+    <!-- html += '</div>'; -->
 }
 if (data.success) {
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 $('#status_type_form_edit')[0].reset();
 $('#status_type-table').DataTable().ajax.reload();
 }
@@ -165,11 +165,11 @@ $.ajax({
 url: target,
 success: function (data) {
 var html = '';
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 setTimeout(function () {
 $('#status_type-table').DataTable().ajax.reload();
 }, 2000);
-$('.status_result').html(html).slideDown(300).delay(3000).slideUp(300);
+<!-- $('.status_result').html(html).slideDown(300).delay(3000).slideUp(300); -->
 }
 })
 }

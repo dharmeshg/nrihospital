@@ -122,6 +122,10 @@
                             </li>
                         @endcan
                          <li id="division"><a href="{{route('division.index')}}">Division</a></li>
+                         <li id="leaveType"><a href="{{route('leaveType.index')}}">Leave Type</a></li>
+                         <li id="leaveType"><a href="{{route('shift.index')}}">Shift Information</a></li>
+
+
                    
                     </ul>
                 </li>

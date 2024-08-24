@@ -26,8 +26,8 @@
                 <tr>
                     <th class="not-exported"></th>
                     <th>{{trans('file.Designation')}}</th>
-                    <th>{{trans('file.Company')}}</th>
-                    <th>{{trans('file.Department')}}</th>
+                    <!-- <th>{{trans('file.Company')}}</th> -->
+                    <!-- <th>{{trans('file.Department')}}</th> -->
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
                 </thead>
@@ -54,13 +54,13 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>{{trans('file.Designation')}} *</label>
+                                <label>{{trans('file.Designation')}} <span class="text-danger">*</span></label>
                                 <input type="text" name="designation_name" id="designation_name" required
                                        class="form-control"
                                        placeholder="should be unique">
                             </div>
 
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Company')}}</label>
                                     <select name="company_id" id="company_id" class="form-control selectpicker dynamic"
@@ -82,11 +82,12 @@
                                             title='{{__('Selecting',['key'=>trans('file.Department')])}}...'>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
 
+                        </div>
 
-                            <div class="container">
-                                <div class="form-group" align="center">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
                                     <input type="hidden" name="action" id="action"/>
                                     <input type="hidden" name="hidden_id" id="hidden_id"/>
                                     <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
@@ -140,7 +141,7 @@
 
             $('#designation-table').DataTable({
                 initComplete: function () {
-                    this.api().columns([2, 4]).every(function () {
+                    this.api().columns([1]).every(function () {
                         var column = this;
                         var select = $('<select><option value=""></option></select>')
                             .appendTo($(column.footer()).empty())
@@ -182,14 +183,14 @@
                         name: 'designation_name',
 
                     },
-                    {
-                        data: 'company',
-                        name: 'company',
-                    },
-                    {
-                        data: 'department',
-                        name: 'department',
-                    },
+                    // {
+                    //     data: 'company',
+                    //     name: 'company',
+                    // },
+                    // {
+                    //     data: 'department',
+                    //     name: 'department',
+                    // },
                     {
                         data: 'action',
                         name: 'action',
@@ -211,7 +212,7 @@
                 'columnDefs': [
                     {
                         "orderable": false,
-                        'targets': [0, 4]
+                        'targets': [0, 2]
                     },
                     {
                         'render': function (data, type, row, meta) {
@@ -293,19 +294,24 @@
                     success: function (data) {
                         var html = '';
                         if (data.errors) {
-                            html = '<div class="alert alert-danger">';
+                            // html = '<div class="alert alert-danger">';
                             for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
+                                // html += '<p>' + data.errors[count] + '</p>';
+                                toastr.error(data.errors[count]);
                             }
-                            html += '</div>';
+                            // html += '</div>';
                         }
                         if (data.success) {
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            // html = '<div class="alert alert-success">' + data.success + '</div>';
                             $('#sample_form')[0].reset();
                             $('select').selectpicker('refresh');
                             $('#designation-table').DataTable().ajax.reload();
+                             setTimeout(function() {
+                                    $('#formModal').modal('hide');
+                                }, 2000);
+                             toastr.success(data.success);
                         }
-                        $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                        // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                     }
                 })
             }
@@ -322,14 +328,15 @@
                     success: function (data) {
                         var html = '';
                         if (data.errors) {
-                            html = '<div class="alert alert-danger">';
+                            // html = '<div class="alert alert-danger">';
                             for (var count = 0; count < data.errors.length; count++) {
-                                html += '<p>' + data.errors[count] + '</p>';
+                                // html += '<p>' + data.errors[count] + '</p>';
+                                toastr.error(data.errors[count]);
                             }
-                            html += '</div>';
+                            // html += '</div>';
                         }
                         if (data.success) {
-                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            // html = '<div class="alert alert-success">' + data.success + '</div>';
                             setTimeout(function () {
                                 $('#formModal').modal('hide');
                                 $('select').selectpicker('refresh');
@@ -337,9 +344,10 @@
                                 $('#sample_form')[0].reset();
 
                             }, 2000);
+                            toastr.success(data.success);
 
                         }
-                        $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                        // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                     }
                 });
             }
@@ -409,17 +417,20 @@
                         success: function (data) {
                             let html = '';
                             if (data.success) {
-                                html = '<div class="alert alert-success">' + data.success + '</div>';
+                                toastr.success(data.success);
+                                // html = '<div class="alert alert-success">' + data.success + '</div>';
                             }
                             if (data.error) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                // html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                toastr.error(data.error);
                             }
                             table.ajax.reload();
                             table.rows('.selected').deselect();
                             if (data.errors) {
-                                html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                // html = '<div class="alert alert-danger">' + data.error + '</div>';
+                                toastr.error(data.error);
                             }
-                            $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                            // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
 
                         }
 
@@ -428,6 +439,10 @@
             } else {
 
             }
+        });
+        $('#formModal').on('hidden.bs.modal', function () {
+        
+            $('#sample_form')[0].reset();
         });
 
 
@@ -447,13 +462,15 @@
                 success: function (data) {
                     let html = '';
                     if (data.success) {
-                        html = '<div class="alert alert-success">' + data.success + '</div>';
+                        toastr.success(data.success);
+                        // html = '<div class="alert alert-success">' + data.success + '</div>';
                     }
                     if (data.error) {
-                        html = '<div class="alert alert-danger">' + data.error + '</div>';
+                        toastr.error(data.error);
+                        // html = '<div class="alert alert-danger">' + data.error + '</div>';
                     }
                     setTimeout(function () {
-                        $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
+                        // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         $('#confirmModal').modal('hide');
                         $('#designation-table').DataTable().ajax.reload();
                     }, 2000);

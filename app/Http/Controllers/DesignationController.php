@@ -69,11 +69,12 @@ class DesignationController extends Controller
 
 		if ($logged_user->can('store-designation'))
 		{
-			$validator = Validator::make($request->only('designation_name', 'company_id', 'department_id'),
+			$validator = Validator::make($request->only('designation_name'),
 				[
-					'designation_name' => 'required|unique:designations,designation_name,NULL,id,department_id,'.$request->department_id,
-					'company_id' => 'required',
-					'department_id' => 'required',
+					// 'designation_name' => 'required|unique:designations,designation_name,NULL,id,department_id,'.$request->department_id,
+					'designation_name' => 'required|unique:designations,designation_name,NULL,id',
+					// 'company_id' => 'required',
+					// 'department_id' => 'required',
 				]
 			);
 
@@ -87,10 +88,8 @@ class DesignationController extends Controller
 			$data = [];
 
 			$data['designation_name'] = $request->designation_name;
-			$data['company_id'] = $request->company_id;
-			$data ['department_id'] = $request->department_id;
-
-
+			// $data['company_id'] = $request->company_id;
+			// $data ['department_id'] = $request->department_id;
 
 
 			designation::create($data);
@@ -116,7 +115,6 @@ class DesignationController extends Controller
 
 			$departments = Department::select('id', 'department_name')->where('company_id', $data->company_id)->get();
 
-
 			return response()->json(['data' => $data,'departments'=>$departments]);
 		}
 	}
@@ -136,13 +134,14 @@ class DesignationController extends Controller
 		{
 			$id = $request->hidden_id;
 
-			$data = $request->only('designation_name', 'company_id', 'department_id');
+			$data = $request->only('designation_name');
 
 
 
-			$validator = Validator::make($request->only('designation_name', 'company_id', 'department_id'),
+			$validator = Validator::make($request->only('designation_name'),
 				[
-					'designation_name' => 'required|unique:designations,designation_name,'. $id .',id,department_id,'.$request->department_id,
+					// 'designation_name' => 'required|unique:designations,designation_name,'. $id .',id,department_id,'.$request->department_id,
+					'designation_name' => 'required|unique:designations,designation_name,' . $id . ',id',
 
 				]
 			);
@@ -157,15 +156,14 @@ class DesignationController extends Controller
 			$data = [];
 
 			$data['designation_name'] = $request->designation_name;
-			if($request->company_id)
-			{
-				$data['company_id'] = $request->company_id;
-			}
-			if($request->department_id)
-			{
-				$data ['department_id'] = $request->department_id;
-			}
-
+			// if($request->company_id)
+			// {
+			// 	$data['company_id'] = $request->company_id;
+			// }
+			// if($request->department_id)
+			// {
+			// 	$data ['department_id'] = $request->department_id;
+			// }
 
 			designation::whereId($id)->update($data);
 

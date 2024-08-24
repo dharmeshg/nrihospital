@@ -10,14 +10,14 @@
         @endif
     </div>
 
-
-    <div class="table-responsive">
+ 
+    <div class="table-responsive mt-4">
         <table id="document-table" class="table ">
             <thead>
             <tr>
                 <th>{{__('Document Type')}}</th>
-                <th>{{trans('file.Title')}}</th>
-                <th>{{__('Expired Date')}}</th>
+                <th>{{__('Relation')}}</th>
+                <th>{{__('Document File')}}</th>
                 <th class="not-exported">{{trans('file.action')}}</th>
             </tr>
             </thead>
@@ -44,7 +44,18 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label>{{__('Document Type')}}</label>
+                                <label>{{trans('file.Relation')}} <span class="text-danger">*</span> </label>
+                                <select name="relation_type_id" required id="document_relation_type"
+                                class="form-control selectpicker"
+                                data-live-search="true" data-live-search-style="contains"
+                                title='{{__('Selecting',['key'=>trans('file.Relation')])}}...'>
+                                @foreach($relationTypes as $item)
+                                <option value="{{$item->id}}">{{$item->type_name}}</option>
+                                @endforeach
+                                </select>
+                             </div>
+                            <div class="col-md-6 form-group">
+                                <label>{{__('Document Type')}} <span class="text-danger">*</span></label>
                                 <select name="document_type_id" id="document_document_type_id" required
                                         class="form-control selectpicker"
                                         data-live-search="true" data-live-search-style="contains"
@@ -55,7 +66,7 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <label>{{trans('file.Title')}} *</label>
                                 <input type="text" name="document_title" id="document_title"
                                        placeholder={{trans('file.Title')}}
@@ -76,15 +87,15 @@
                                               rows="3"></textarea>
                                 </div>
                             </div>
-
+ -->
                             <div class="col-md-6 form-group">
-                                <label>{{trans('file.Document')}} {{trans('file.File')}} *</label>
+                                <label>{{trans('file.Document')}} {{trans('file.File')}} <span class="text-danger">*</span> </label>
                                 <input type="file" name="document_file" id="document_document_file"
                                        class="form-control">
                                 <span id="stored_document_document"></span>
                             </div>
 
-                            <div class="col-md-6 form-group">
+                            <!-- <div class="col-md-6 form-group">
                                 <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input" name="is_notify"
                                            id="document_is_notify" value="1">
@@ -92,7 +103,7 @@
                                            for="document_is_notify">{{__('Send Notification?')}}
                                         ({{__('will get notification email before 3 days of expiry date')}})</label>
                                 </div>
-                            </div>
+                            </div> -->
 
 
                             <div class="container">
@@ -113,7 +124,7 @@
     </div>
 
 
-    <div class="modal fade confirmModal" role="dialog">
+    <div class="modal fade confirmModal" role="dialog" id="documentConfirmModel">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

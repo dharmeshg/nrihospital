@@ -4,9 +4,9 @@
         <div class="container-fluid">
             <div class="card">
                 <ul class="nav nav-tabs d-flex justify-content-between" id="myTab" role="tablist">
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link " href="{{route('leave_type.index')}}" id="Leave_type-tab" data-toggle="tab" data-table= "leave" data-target="#Leave_type" role="tab" aria-controls="Leave_type" aria-selected="true">{{__('Leave Type')}}</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{route('status_type.index')}}" id="Status_type-tab" data-toggle="tab" data-table= "status" data-target="#Status_type" role="tab" aria-controls="Status_type" aria-selected="false">{{__('Employee Status')}}</a>
                     </li>
@@ -40,14 +40,17 @@
                     <li class="nav-item">
                         <a class="nav-link " href="#" id="Loan_type-tab" data-toggle="tab" data-table="loan_type" data-target="#Loan_type" role="tab" aria-controls="Loan_type" aria-selected="false">{{__('Loan Type')}}</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#" id="employeeReason-tab" data-toggle="tab" data-table="employee_reason" data-target="#employeeReason" role="tab" aria-controls="employeeReason" aria-selected="false">{{__('Employee Reason')}}</a>
+                    </li>
                 </ul>
             </div>
         </div>
         <div class="tab-content" id="myTabContent">
 
-            <div class="pt-0 tab-pane fade show active" id="Leave_type" role="tab" aria-labelledby="Leave_type-tab">
+            <!-- <div class="pt-0 tab-pane fade show active" id="Leave_type" role="tab" aria-labelledby="Leave_type-tab">
               @include('settings.variables.partials.leave_type')
-            </div>
+            </div> -->
             <div class="pt-0 tab-pane fade " id="Award_type" role="tab"  aria-labelledby="Award_type-tab">
                @include('settings.variables.partials.award_type')
             </div>
@@ -64,7 +67,7 @@
                 @include('settings.variables.partials.expense_type')
             </div>
 
-            <div class="pt-0 tab-pane fade " id="Status_type" role="tab"  aria-labelledby="Status_type-tab">
+            <div class="pt-0 tab-pane fade show active" id="Status_type" role="tab"  aria-labelledby="Status_type-tab">
                 @include('settings.variables.partials.status_type')
             </div>
 
@@ -98,6 +101,9 @@
             <div class="pt-0 tab-pane fade " id="employeeType" role="tab"  aria-labelledby="employeeType-tab">
                 @include('settings.variables.partials.employee_type')
             </div>
+            <div class="pt-0 tab-pane fade " id="employeeReason" role="tab"  aria-labelledby="employeeReason-tab">
+                @include('settings.variables.partials.employee_reason')
+            </div>
             <div class="pt-0 tab-pane fade " id="costCenter" role="tab"  aria-labelledby="costCenter-tab">
                 @include('settings.variables.partials.cost_center')
             </div>
@@ -121,7 +127,8 @@
         let leaveLoad = 0;
         $(document).ready(function() {
             if (leaveLoad == 0) {
-                @include('settings.variables.JS_DT.leave_type_js')
+         
+                @include('settings.variables.JS_DT.status_type_js')
                     leaveLoad = 1;
             }
         });
@@ -177,6 +184,10 @@
 
         $('[data-table="employee_type"]').on('click', function (e) {
             @include('settings.variables.JS_DT.employee_type_js')
+        });
+
+        $('[data-table="employee_reason"]').on('click', function (e) {
+            @include('settings.variables.JS_DT.employee_reason_js')
         });
 
         $('[data-table="cost_center"]').on('click', function (e) {

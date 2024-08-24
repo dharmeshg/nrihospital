@@ -7,7 +7,7 @@
         todayHighlight: true
     });
 
-
+ 
     var table_table = $('#document-table').DataTable({
         initComplete: function () {
             this.api().columns([0]).every(function () {
@@ -49,12 +49,12 @@
 
             },
             {
-                data: 'title',
-                name: 'title',
+                data: 'relation',
+                name: 'relation',
             },
             {
-                data: 'expiry_date',
-                name: 'expiry_date',
+                data: 'title',
+                name: 'title',
             },
             {
                 data: 'action',
@@ -94,6 +94,7 @@
         $('#document_action_button').val('{{trans('file.Add')}}');
         $('#document_action').val('{{trans('file.Add')}}');
         $('#DocumentformModal').modal('show');
+        $('#stored_document_document').hide();
     });
 
     $('#document_sample_form').on('submit', function (event) {
@@ -123,8 +124,12 @@
                         $('select').selectpicker('refresh');
                         $('.date').datepicker('update');
                         $('#document-table').DataTable().ajax.reload();
+                         setTimeout(function () {
+                            $('#DocumentformModal').modal('hide')
+                        }, 2000);
                     }
                     $('#document_form_result').html(html).slideDown(300).delay(5000).slideUp(300);
+
                 }
 
             });
@@ -171,7 +176,7 @@
 
 
     $(document).on('click', '.document_edit', function () {
-
+        $('#stored_document_document').show();
         var id = $(this).attr('id');
 
         var target = "{{ route('documents.index') }}/" + id + '/edit';
@@ -188,6 +193,7 @@
                 $('#document_expiry_date').val(html.data.expiry_date);
                 $('#document_description').val(html.data.description);
                 $('#document_document_type_id').selectpicker('val', html.data.document_type_id);
+                $('#document_relation_type').selectpicker('val', html.data.relation_type_id);
                 if (html.data.is_notify == 1) {
                     $('#document_is_notify').prop('checked', true);
                 } else {
@@ -195,10 +201,11 @@
                 }
 
 
-                {{--                if(html.data.document_file){--}}
-                {{--                let d_link = '{{ route('documents_document.download')}}/' + id;--}}
-                {{--                $('#stored_document_document').html('<a href="'+d_link+'"><b>Download</b></a>');--}}
-                {{--                }--}}
+                if (html.data.document_file) {
+                    let d_link = `{{ route('documents_document.download', ['id' => ':id']) }}`.replace(':id', id);
+                    $('#stored_document_document').html('<a href="' + d_link + '"><b>Download</b></a>');
+                }
+
 
                 $('#document_hidden_id').val(html.data.id);
                 $('.modal-title').text('{{trans('file.Edit')}}');
@@ -214,7 +221,7 @@
 
     $(document).on('click', '.document_delete', function () {
     document_delete_id = $(this).attr('id');
-        $('.confirmModal').modal('show');
+        $('#documentConfirmModel').modal('show');
         $('.modal-title').text('{{__('DELETE Record')}}');
         $('.document-ok').text('{{trans('file.OK')}}');
     });
@@ -224,7 +231,7 @@
         $('#document_sample_form')[0].reset();
         $('select').selectpicker('refresh');
         $('.date').datepicker('update');
-    $('.confirmModal').modal('hide');
+    $('#documentConfirmModel').modal('hide');
         $('#document-table').DataTable().ajax.reload();
     });
 
@@ -237,7 +244,7 @@
             },
             success: function (data) {
                 setTimeout(function () {
-                    $('.confirmModal').modal('hide');
+                    $('#documentConfirmModel').modal('hide');
                     $('#document-table').DataTable().ajax.reload();
                 }, 2000);
             }

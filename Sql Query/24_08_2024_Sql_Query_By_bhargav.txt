@@ -1,0 +1,10 @@
+ALTER TABLE employees
+ADD COLUMN access_ot VARCHAR(255) NULL AFTER date_of_relieving,
+ADD COLUMN access_coff VARCHAR(255) NULL AFTER access_ot,
+ADD COLUMN access_pf VARCHAR(255) NULL AFTER access_coff,
+ADD COLUMN access_esi VARCHAR(255) NULL AFTER access_pf,
+ADD COLUMN access_manual_attendance VARCHAR(255) NULL AFTER access_esi,
+ADD COLUMN access_leaves VARCHAR(255) NULL AFTER access_manual_attendance,
+ADD COLUMN access_sms VARCHAR(255) NULL AFTER access_leaves,
+ADD COLUMN access_shift VARCHAR(255) NULL AFTER access_sms,
+ADD COLUMN access_shift_details VARCHAR(255) NULL AFTER access_shift;

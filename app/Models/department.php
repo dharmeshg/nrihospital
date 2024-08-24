@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class department extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
 	protected $fillable = [
 		'department_name', 'company_id','department_head','is_active',

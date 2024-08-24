@@ -4,7 +4,7 @@
     <section>
         <div class="container-fluid mb-3">
             @can('store-company')
-                <button type="button" class="btn btn-info" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('Add Division')}}</button>
+                <button type="button" class="btn btn-info" name="create_record" id="create_record"><i class="fa fa-plus"></i> {{__('Add Leave Type')}}</button>
             @endcan
             @can('delete-company')
                 <button type="button" class="btn btn-danger" name="bulk_delete" id="bulk_delete"><i class="fa fa-minus-circle"></i> {{__('Bulk delete')}}</button>
@@ -13,11 +13,15 @@
 
 
         <div class="table-responsive">
-            <table id="division-table" class="table ">
+            <table id="leaveType-table" class="table ">
                 <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>Name</th>
+                    <th>Leave Name</th>
+                    <th>No. of Leave Per Annum</th>
+                    <th>Max. Carry Forward</th>
+                    <th>Description</th>
+                    <th>Carry Forward</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
 
                 </tr>
@@ -33,7 +37,7 @@
             <div class="modal-content">
 
                 <div class="modal-header">
-                    <h5 id="exampleModalLabel" class="modal-title">{{__('Add Division')}}</h5>
+                    <h5 id="exampleModalLabel" class="modal-title">{{__('Add Leave Type')}}</h5>
                     <button type="button" data-dismiss="modal" id="close" aria-label="Close" class="close"><i class="dripicons-cross"></i></button>
                 </div>
 
@@ -47,13 +51,35 @@
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <label>{{__('Name')}} <span class="text-danger">*</span></label>
-                                <input type="text" name="division_name" id="division_name" required class="form-control"
+                                <input type="text" name="leave_type" id="leave_type" required class="form-control"
                                        placeholder="Name">
                             </div>
+                            <div class="col-md-12 form-group">
+                                <label>{{__('Days Per Year')}} *</label>
+                                <input type="number" name="allocated_day" id="allocated_day"  class="form-control"
+                                    placeholder="{{__('Days Per Year')}}">
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label>{{__('Max. Carry Forward')}} </label>
+                                <input type="number" name="max_carry_forward" id="max_carry_forward"  class="form-control"
+                                    placeholder="{{__('Max. Carry Forward')}}">
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label>{{__('Carry Forward')}} </label>
+                                <!-- <input type="number" name="max_carry_forward" id="max_carry_forward"  class="form-control"
+                                    placeholder="{{__('Carry Forward')}}"> -->
+                                    <select class="form-control" id="carry_forward" name="carry_forward">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                            </div>
+                            <div class="col-md-12 form-group">
+                                <label>{{__('Description')}} </label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
 
-                        </div>
-                        <div class="row">
-                            <div class=" col-md-12 form-group" >
+
+                            <div class="col-md-12 form-group" align="">
                                 <input type="hidden" name="action" id="action"/>
                                 <input type="hidden" name="hidden_id" id="hidden_id"/>
                                 <input type="submit" name="action_button" id="action_button" class="btn btn-warning"
@@ -68,6 +94,95 @@
         </div>
     </div>
 
+    <!-- <div class="modal fade" id="company_modal" tabindex="-1" role="dialog" aria-labelledby="basicModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">{{__('Company Info')}}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <span id="logo_id"></span>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div class="table-responsive">
+
+                                <table class="table  table-bordered">
+                                    <tr>
+                                        <th>{{trans('file.Company')}}</th>
+                                        <td id="company_name_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{__('Company Type')}}</th>
+                                        <td id="company_type"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{__('Trading Name')}}</th>
+                                        <td id="trading_name_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{__('Registration Number')}}</th>
+                                        <td id="registration_no_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{__('Contact Number')}}</th>
+                                        <td id="contact_no_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{trans('file.Email')}}</th>
+                                        <td id="email_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{trans('file.Website')}}</th>
+                                        <td id="website_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{__('Tax Number')}}</th>
+                                        <td id="tax_no_id"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{trans('file.Address')}}</th>
+                                        <td><p id="address1_id"></p>
+                                            <p id="address2_id"></p>
+                                            <p id="city_id"></p>
+                                            <p id="state_id"></p>
+                                            <p id="country_id"></p>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th>{{trans('file.ZIP')}}</th>
+                                        <td id="zip_id"></td>
+                                    </tr>
+
+
+                                </table>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('file.Close')}}</button>
+            </div>
+        </div>
+    </div> -->
 
     <div id="confirmModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
@@ -95,7 +210,7 @@
             "use strict";
 
             $(document).ready(function () {
-                var table_table = $('#division-table').DataTable({
+                var table_table = $('#leaveType-table').DataTable({
                 initComplete: function () {
                     this.api().columns([1]).every(function () {
                         var column = this;
@@ -122,7 +237,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('division.index') }}",
+                    url: "{{ route('leaveType.index') }}",
                 },
 
                 columns: [
@@ -133,11 +248,30 @@
                         searchable: false
                     },
                     {
-                        data: 'division_name',
-                        name: 'division_name',
+                        data: 'leave_type',
+                        name: 'leave_type',
 
                     },
+                    {
+                        data: 'allocated_day',
+                        name: 'allocated_day',
 
+                    },
+                    {
+                        data: 'max_carry_forward',
+                        name: 'max_carry_forward',
+
+                    },
+                    {
+                        data: 'description',
+                        name: 'description',
+
+                    },
+                    {
+                        data: 'carry_forward',
+                        name: 'carry_forward',
+
+                    },
                     {
                         data: 'action',
                         name: 'action',
@@ -220,7 +354,7 @@
             // $(document).on('click', '#create_record', function () {
             $('#create_record').on('click', function () {
                 console.log('Create');
-                $('.modal-title').text('{{__('Add New Divison')}}');
+                $('.modal-title').text('{{__('Add New Leave Type')}}');
                 $('#action_button').val('{{trans("file.Add")}}');
                 $('#action').val('{{trans("file.Add")}}');
                 $('#store_logo').html('');
@@ -232,7 +366,7 @@
                 event.preventDefault();
                 if ($('#action').val() == '{{trans('file.Add')}}') {
                     $.ajax({
-                        url: "{{ route('division.store') }}",
+                        url: "{{ route('leaveType.store') }}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -246,19 +380,17 @@
                                 // html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
                                     toastr.error(data.errors[count]);
-                                    // html += '<p>' + data.errors[count] + '</p>';
                                 }
                                 // html += '</div>';
                             }
                             if (data.success) {
-                                // html = '<div class="alert alert-success">' + data.success + '</div>';
+                                toastr.success(data.success);
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
-                                $('#division-table').DataTable().ajax.reload(null, false);
+                                $('#leaveType-table').DataTable().ajax.reload(null, false);
                                 setTimeout(function() {
                                     $('#formModal').modal('hide');
                                 }, 2000); 
-                                toastr.success(data.success);
                             }
                             // $('#form_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         }
@@ -267,7 +399,7 @@
 
                 if ($('#action').val() == '{{trans('file.Edit')}}') {
                     $.ajax({
-                        url: "{{ route('division.update') }}",
+                        url: "{{ route('leaveType.update') }}",
                         method: "POST",
                         data: new FormData(this),
                         contentType: false,
@@ -277,19 +409,17 @@
                         success: function (data) {
                             var html = '';
                             if (data.errors) {
-                                // html = '<div class="alert alert-danger">';
+                                html = '<div class="alert alert-danger">';
                                 for (var count = 0; count < data.errors.length; count++) {
                                     toastr.error(data.errors[count]);
-                                    // html += '<p>' + data.errors[count] + '</p>';
                                 }
-                                // html += '</div>';
+                                html += '</div>';
                             }
                             if (data.success) {
-                                // html = '<div class="alert alert-success">' + data.success + '</div>';
+                                toastr.success(data.success);
                                 $('#sample_form')[0].reset();
                                 $('select').selectpicker('refresh');
-                                $('#division-table').DataTable().ajax.reload();
-                                toastr.success(data.success);
+                                $('#leaveType-table').DataTable().ajax.reload();
                             }
                             setTimeout(function() {
                                     $('#formModal').modal('hide');
@@ -300,18 +430,27 @@
                 }
             });
 
+            $('#formModal').on('hidden.bs.modal', function () {
+                $('#sample_form')[0].reset();
+
+            });
+
 
             $(document).on('click', '.edit', function () {
                 var id = $(this).attr('id');
                 $('#form_result').html('');
 
-                var target = "{{ url('/organization/division/edit')}}/" + id;
+                var target = "{{ url('/organization/leaveType/edit')}}/" + id;
 
                 $.ajax({
                     url: target,
                     dataType: "json",
                     success: function (html) {
-                        $('#division_name').val(html.data.division_name);
+                        $('#leave_type').val(html.data.leave_type);
+                        $('#allocated_day').val(html.data.allocated_day);
+                        $('#max_carry_forward').val(html.data.max_carry_forward);
+                        $('#carry_forward').val(html.data.carry_forward);
+                        $('#description').val(html.data.description);
                         $('#hidden_id').val(html.data.id);
                         $('.modal-title').text('{{trans('file.Edit')}}');
                         $('#action_button').val('{{trans('file.Edit')}}');
@@ -321,6 +460,38 @@
                 })
             });
 
+
+            $(document).on('click', '.show_new', function () {
+                var id = $(this).attr('id');
+                $('#form_result').html('');
+                var target = "{{ url('/organization/companies')}}/" + id;
+                $.ajax({
+                    url: target,
+                    dataType: "json",
+                    success: function (result) {
+                        $('#company_name_id').html(result.data.company_name);
+                        $('#company_type').html(result.data.company_type.type_name);
+                        $('#trading_name_id').html(result.data.trading_name);
+                        $('#registration_no_id').html(result.data.registration_no);
+                        $('#contact_no_id').html(result.data.contact_no);
+                        $('#email_id').html(result.data.email);
+                        $('#website_id').html(result.data.website);
+                        $('#tax_no_id').html(result.data.tax_no);
+                        $('#address1_id').html(result.data.location.address1);
+                        $('#address2_id').html(result.data.location.address2);
+                        $('#city_id').html(result.data.location.city);
+                        $('#state_id').html(result.data.location.state);
+                        $('#country_id').html(result.data.location.country.name);
+                        $('#zip_id').html(result.data.location.zip);
+                        if (result.data.company_logo) {
+                            $('#logo_id').html("<img src={{ URL::to('/public') }}/uploads/company_logo/" + result.data.company_logo + " width='70'  class='img-thumbnail' />");
+                            $('#logo_id').append("<input type='hidden'  name='hidden_image' value='" + result.data.company_logo + "'  />");
+                        }
+                        $('#company_modal').modal('show');
+                        $('.modal-title').text('{{__('Company Info')}}');
+                    }
+                });
+            });
 
             let lid;
 
@@ -334,13 +505,13 @@
 
 
             $(document).on('click', '#bulk_delete', function () {
-                let table = $('#division-table').DataTable();
+                let table = $('#leaveType-table').DataTable();
                 let id = [];
                 id = table.rows({selected: true}).ids().toArray();
                 if (id.length > 0) {
-                    if (confirm("Are you sure you want to delete the selected division?")) {
+                    if (confirm("Are you sure you want to delete the selected Leave Type?")) {
                         $.ajax({
-                            url: '{{route('mass_delete_division')}}',
+                            url: '{{route('mass_delete_leaveType')}}',
                             method: 'POST',
                             data: {
                                 divisionIdArray: id
@@ -349,17 +520,14 @@
                                 let html = '';
                                 if (data.success) {
                                     toastr.success(data.success);
-                                    // html = '<div class="alert alert-success">' + data.success + '</div>';
                                 }
                                 if (data.error) {
-                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
                                     toastr.error(data.error);
                                 }
                                 table.ajax.reload();
                                 table.rows('.selected').deselect();
                                 if (data.errors) {
                                     toastr.error(data.error);
-                                    // html = '<div class="alert alert-danger">' + data.error + '</div>';
                                 }
                                 // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                             }
@@ -372,21 +540,17 @@
 
             });
 
-            $('#formModal').on('hidden.bs.modal', function () {
-                $('#sample_form')[0].reset();
-            });
-
 
             $('.close').on('click', function () {
                 $('#sample_form')[0].reset();
                 $('#store_logo').html('');
                 $('#logo_id').html('');
-                $('#division-table').DataTable().ajax.reload();
+                $('#leaveType-table').DataTable().ajax.reload();
                 $('select').selectpicker('refresh');
             });
 
             $('#ok_button').on('click', function () {
-                var target = "{{ url('/organization/division/delete')}}/" + lid;
+                var target = "{{ url('/organization/leaveType/delete')}}/" + lid;
                 $.ajax({
                     url: target,
                     beforeSend: function () {
@@ -397,17 +561,15 @@
 
                         let html = '';
                         if (data.success) {
-                            // html = '<div class="alert alert-success">' + data.success + '</div>';
                             toastr.success(data.success);
                         }
                         if (data.error) {
                             toastr.error(data.error);
-                            // html = '<div class="alert alert-danger">' + data.error + '</div>';
                         }
                        setTimeout(function () {
                         // $('#general_result').html(html).slideDown(300).delay(5000).slideUp(300);
                         $('#confirmModal').modal('hide');
-                        $('#division-table').DataTable().ajax.reload();
+                        $('#leaveType-table').DataTable().ajax.reload();
                     }, 2000);
                     }
                 })

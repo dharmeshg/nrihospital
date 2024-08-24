@@ -53,7 +53,7 @@
     <!-- Custom Scrollbar-->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') }}"></noscript>
-
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <!-- date range stylesheet-->
     <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/daterange/css/daterangepicker.min.css') }}">
     <noscript><link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ asset('vendor/daterange/css/daterangepicker.min.css') }}"></noscript>
@@ -144,6 +144,7 @@
 <script type="text/javascript" src="{{ asset('vendor/jquery-clockpicker/bootstrap-clockpicker.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/popper.js/umd/popper.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 <script type="text/javascript" src="{{ asset('vendor/bootstrap-toggle/js/bootstrap-toggle.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('vendor/bootstrap/js/bootstrap-select.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('js/grasp_mobile_progress_circle-1.0.0.min.js') }}"></script>
@@ -193,13 +194,24 @@
 
 <script type="text/javascript" src="{{ asset('vendor/select2/dist/js/select2.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+
 
 @if((request()->is('admin/dashboard*')) || (request()->is('calendar*')) )
     @include('calendarable.js')
 @endif
 
 {{-- New Format --}}
-
+<script>
+    $(document).ready(function() {
+        toastr.options.timeOut = 10000;
+        @if(Session::has('error'))
+        toastr.error('{{ Session::get("error") }}');
+        @elseif(Session::has('success'))
+        toastr.success('{{ Session::get("success") }}');
+        @endif
+    });
+    </script>
 
 <script type="text/javascript">
     (function ($) {
@@ -232,6 +244,10 @@
                 },
             });
         })
+
+        $(".hrs").inputmask({"mask": "99:99 Hrs"});
+        $(".min").inputmask({"mask": "99 Min"});
+
 
     })(jQuery);
 </script>

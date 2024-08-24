@@ -25,6 +25,7 @@ use App\Models\Qualification;
 use App\Models\Division;
 use App\Models\CostCenter;
 use App\Models\Grade;
+use App\Models\Shift;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Exception;
 use Illuminate\Http\Request;
@@ -338,13 +339,14 @@ class EmployeeController extends Controller
             $qualification = Qualification::select('id','name')->get();
             $costCenter = CostCenter::select('id','name')->get();
             $grades = Grade::select('id','name')->get();
+            $shift = Shift::select('id','shift_name')->get();
             $loanTypes = LoanType::select('id','type_name')->get();
             $deductionTypes = DeductionType::select('id','type_name')->get();
             $roles = Role::where('id', '!=', 3)->where('is_active', 1)->select('id', 'name')->get();
 
             return view('employee.dashboard', compact('employee', 'countries', 'companies',
                 'departments', 'designations', 'statuses', 'office_shifts', 'document_types',
-                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes','locations','employee_type','grades','costCenter','qualification','division','employee_reason'));
+                'education_levels', 'language_skills', 'general_skills', 'roles','relationTypes','loanTypes','deductionTypes','locations','employee_type','grades','costCenter','qualification','division','employee_reason','shift'));
         } else {
             return response()->json(['success' => __('You are not authorized')]);
         }
@@ -422,7 +424,7 @@ class EmployeeController extends Controller
 
         if ($logged_user->can('modify-details-employee')) {
             if (request()->ajax()) {
-                $validator = Validator::make($request->only('department_id', 'designation_id', 'employee_type', 'location_id', 'staff_id', 'division_name', 'qualification','year_of_completion', 'experience', 'joining_date', 'company_id', 'cost_center', 'role_users_id', 'location_id', 'grade',
+                $validator = Validator::make($request->only('department_id', 'designation_id','employee_code', 'employee_type', 'location_id', 'staff_id', 'division_name', 'qualification','year_of_completion', 'experience', 'joining_date', 'company_id', 'cost_center', 'role_users_id', 'location_id', 'grade',
                     'reporting_head', 'reporting_hr', 'gl', 'ctc', 'date_of_regularization'
                 ),
                     [
@@ -445,8 +447,9 @@ class EmployeeController extends Controller
                         'department_id' => 'required',
                         'designation_id' => 'required',
                         'employee_type' => 'required',
+                        'employee_code' => 'required|unique:employees,employee_code,'.$employee,
                         'location_id' => 'required',
-                        'staff_id' => 'required|numeric|unique:employees,staff_id,'.$employee,
+                        'staff_id' => 'required|numeric',
                         'division_name' => 'required',
                         'qualification' => 'required',
                         'year_of_completion' => 'required',
@@ -469,6 +472,8 @@ class EmployeeController extends Controller
                     return response()->json(['errors' => $validator->errors()->all()]);
                 }
 
+
+
                 $data = [];
                 // $data['first_name'] = $request->first_name;
                 // $data['last_name'] = $request->last_name;
@@ -477,14 +482,17 @@ class EmployeeController extends Controller
                 // $data['gender'] = $request->gender;
 
                 $data['employee_type'] = $request->employee_type;
+                $data['employee_code'] = $request->employee_code;
                 $data['location_id'] = $request->location_id;
                 $data['qualification'] = $request->qualification;
                 $data['year_of_completion'] = $request->year_of_completion;
                 $data['experience'] = $request->experience;
                 $data['cost_center'] = $request->cost_center;
                 $data['grade'] = $request->grade;
-                $data['reporting_head'] = $request->reporting_head;
-                $data['reporting_hr'] = $request->reporting_hr;
+                // $data['reporting_head'] = $request->reporting_head;
+                // $data['reporting_hr'] = $request->reporting_hr;
+                $data['reporting_head'] = $request->reporting_head_hidden;
+                $data['reporting_hr'] = $request->reporting_hr_hidden;
                 $data['gl'] = $request->gl;
                 $data['ctc'] = $request->ctc;
                 $data['division_name'] = $request->division_name;
@@ -513,7 +521,20 @@ class EmployeeController extends Controller
                 
                 $data['is_active'] = 1;
 
+                $file = $request->emp_profile_picture;
 
+                $file_name = null;
+
+                if (isset($file))
+                {
+                    if ($file->isValid())
+                    {
+                        $file_name = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                        $file->storeAs('profile_photos', $file_name);
+                      
+                        $data['emp_profile_picture'] = $file_name;
+                    }
+                }
 
                 $user = [];
                 $user['first_name'] = $request->first_name;
@@ -569,9 +590,9 @@ class EmployeeController extends Controller
                         'pf_no' => 'required',
                         'uan_no' => 'required',
                         'esi_no' => 'required',
-                        'aadhar_no' => 'required',
-                        'mediciaim_policy_no' => 'required',
-                        'pan_no' => 'required',
+                        'aadhar_no' => 'required|numeric',
+                        'mediciaim_policy_no' => 'required|numeric',
+                        'pan_no' => 'required|numeric',
                         // 'bank' => 'required',
                         // 'account_no' => 'required',
                         // 'ifsc_no' => 'required',
@@ -648,6 +669,44 @@ class EmployeeController extends Controller
                     $data['emp_status_id'] = null;
                     $data['emp_reason_id'] = null;
                 }
+
+                employee::find($employee)->update($data);
+
+                return response()->json(['success' => __('Data Added successfully.')]);
+            }
+        }
+
+        return response()->json(['success' => __('You are not authorized')]);
+    }
+
+    public function accessabilityUpdate(Request $request, $employee)
+    {
+
+        $logged_user = auth()->user();
+
+        if ($logged_user->can('modify-details-employee')) {
+            if (request()->ajax()) {
+
+                $data = [];
+
+                $data = [
+                    'access_ot' => $request->access_ot ?? 'No',
+                    'access_coff' => $request->access_coff ?? 'No',
+                    'access_pf' => $request->access_pf ?? 'No',
+                    'access_esi' => $request->access_esi ?? 'No',
+                    'access_manual_attendance' => $request->access_manual_attendance ?? 'No',
+                    'access_leaves' => $request->access_leaves ?? 'No',
+                    'access_sms' => $request->access_sms ?? 'No'
+                ];
+
+                if ($request->access_shift_details != null) {
+                    $data['access_shift'] = 'Shift';
+                    $data['access_shift_details'] = $request->access_shift_details;
+                } else {
+                    $data['access_shift'] = $request->access_shift;
+                    $data['access_shift_details'] = null;
+                }
+
 
                 employee::find($employee)->update($data);
 
@@ -861,4 +920,48 @@ class EmployeeController extends Controller
 
         // return $pdf->stream();
     }
+
+    public function search_reporting_head(Request $request){
+        $searchTerm = $request->value;
+        if($searchTerm != ''){
+            $employees = Employee::select('employee_code','first_name','last_name')
+                         ->where('employee_code', 'like', "%{$searchTerm}%")
+                         ->orWhere('first_name', 'like', "%{$searchTerm}%")
+                         ->orWhere('last_name', 'like', "%{$searchTerm}%")
+                         ->get();
+            $results = '';
+            foreach ($employees as $employee) {
+                // $results .= "<div class='suggestion-item' data-value='{$employee->employee_code}'>{$employee->employee_code}</div>";
+                $results .= "<li data-id='{$employee->employee_code}'>{$employee->employee_code} - {$employee->first_name} {$employee->last_name}</li>";
+            }
+        }else{
+                $results = '';
+        }
+       
+    
+        return response()->json($results);
+        
+    }
+    public function search_reporting_hr(Request $request){
+        $searchTerm = $request->value;
+        if($searchTerm != ''){
+            $employees = Employee::select('employee_code','first_name','last_name')
+                         ->where('employee_code', 'like', "%{$searchTerm}%")
+                         ->orWhere('first_name', 'like', "%{$searchTerm}%")
+                         ->orWhere('last_name', 'like', "%{$searchTerm}%")
+                         ->get();
+            $results = '';
+            foreach ($employees as $employee) {
+                // $results .= "<div class='suggestion-item' data-value='{$employee->employee_code}'>{$employee->employee_code}</div>";
+                $results .= "<li data-id='{$employee->employee_code}'>{$employee->employee_code} - {$employee->first_name} {$employee->last_name}</li>";
+            }
+        }else{
+                $results = '';
+        }
+       
+    
+        return response()->json($results);
+        
+    }
+
 }

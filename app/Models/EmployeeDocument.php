@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class EmployeeDocument extends Model
 {
+	use SoftDeletes;
+
 	protected $fillable = [
-		'document_title','document_type_id','employee_id','expiry_date','document_file','description',
+		'document_title','document_type_id','employee_id','expiry_date','document_file','description','relation_type_id',
 		'is_notify'
 	];
 
@@ -24,9 +26,12 @@ class EmployeeDocument extends Model
 	{
 		$this->attributes['expiry_date'] = Carbon::createFromFormat(env('Date_Format'), $value)->format('Y-m-d');
 	}
-
+	public function relationType(){
+        return $this->belongsTo(RelationType::class,'relation_type_id');
+    }
 	public function getExpiryDateAttribute($value)
 	{
 		return Carbon::parse($value)->format(env('Date_Format'));
 	}
 }
+ 

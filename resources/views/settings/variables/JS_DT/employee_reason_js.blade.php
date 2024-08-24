@@ -1,6 +1,6 @@
-$('#employee_type-table').DataTable().clear().destroy();
+$('#employee_reason-table').DataTable().clear().destroy();
 
-var table_table = $('#employee_type-table').DataTable({
+var table_table = $('#employee_reason-table').DataTable({
     initComplete: function () {
         this.api().columns([1]).every(function () {
             var column = this;
@@ -19,7 +19,7 @@ var table_table = $('#employee_type-table').DataTable({
                 $('select').selectpicker('refresh');
             });
         });
-    },
+    }, 
     responsive: true,
     fixedHeader: {
         header: true,
@@ -28,12 +28,12 @@ var table_table = $('#employee_type-table').DataTable({
     processing: true,
     serverSide: true,
     ajax: {
-        url: "{{ route('employee_type.index') }}",
+        url: "{{ route('employee_reason.index') }}",
     },
     columns: [
         {
-            data: 'name',
-            name: 'name',
+            data: 'title',
+            name: 'title',
         },
         {
             data: 'action',
@@ -70,29 +70,29 @@ new $.fn.dataTable.FixedHeader(table_table);
 
 
 
-$('#employee_type_submit').on('click', function (event) {
+$('#employee_reason_submit').on('click', function (event) {
     event.preventDefault();
-    let employeeTypename = $('input[name="employee_type_name"]').val();
+    let employeeReasonTitle = $('input[name="employee_reason_title"]').val();
 
     $.ajax({
-        url: "{{ route('employee_type.store') }}",
+        url: "{{ route('employee_reason.store') }}",
         method: "POST",
-        data: { name: employeeTypename },
+        data: { title: employeeReasonTitle },
         success: function (data) {
             var html = '';
             if (data.errors) {
                 html = '<div class="alert alert-danger">';
                 for (var count = 0; count < data.errors.length; count++) {
-                    toastr.error(data.errors[count]);
+                    html += '<p>' + data.errors[count] + '</p>';
                 }
                 html += '</div>';
             }
             if (data.success) {
-                toastr.success(data.success);
-                $('#employee_type_form')[0].reset();
-                $('#employee_type-table').DataTable().ajax.reload();
+                html = '<div class="alert alert-success">' + data.success + '</div>';
+                $('#employee_reason_form')[0].reset();
+                $('#employee_reason-table').DataTable().ajax.reload();
             }
-            <!-- $('.employee_type_result').html(html).slideDown(300).delay(5000).slideUp(300); -->
+            $('.employee_reason_result').html(html).slideDown(300).delay(5000).slideUp(300);
 
         }
     });
@@ -100,76 +100,76 @@ $('#employee_type_submit').on('click', function (event) {
 });
 
 
-$(document).on('click', '.employee_type_edit', function () {
+$(document).on('click', '.employee_reason_edit', function () {
     var id = $(this).attr('id');
-    $('.employee_type_result').html('');
-    var target = "{{ route('employee_type.index') }}/" + id + '/edit';
+    $('.employee_reason_result').html('');
+    var target = "{{ route('employee_reason.index') }}/" + id + '/edit';
     $.ajax({
         url: target,
         dataType: "json",
         success: function (html) {
             console.log(html);
-            $('input[name="employee_type_name_edit"]').val(html.data.name);
-            $('#hidden_employee_type_id').val(html.data.id);
-            $('#employeeTypeEditModal').modal('show');
+            $('input[name="employee_reason_title_edit"]').val(html.data.title);
+            $('#hidden_employee_reason_id').val(html.data.id);
+            $('#employeeReasonEditModal').modal('show');
         }
     });
 });
 
 
-$('#employee_type_edit_submit').on('click', function (event) {
+$('#employee_reason_edit_submit').on('click', function (event) {
     event.preventDefault();
-    let employee_type_name_edit = $('input[name="employee_type_name_edit"]').val();
-    let hidden_employee_type_id = $('#hidden_employee_type_id').val();
+    let employee_reason_title_edit = $('input[name="employee_reason_title_edit"]').val();
+    let hidden_employee_reason_id = $('#hidden_employee_reason_id').val();
     $.ajax({
-        url: "{{ route('employee_type.update') }}",
+        url: "{{ route('employee_reason.update') }}",
         method: "POST",
-        data: { name: employee_type_name_edit, hidden_employee_type_id: hidden_employee_type_id },
+        data: { title: employee_reason_title_edit, hidden_employee_reason_id: hidden_employee_reason_id },
         success: function (data) {
             var html = '';
             if (data.errors) {
                 html = '<div class="alert alert-danger">';
                 for (var count = 0; count < data.errors.length; count++) {
-                    toastr.error(data.errors[count]);
+                    html += '<p>' + data.errors[count] + '</p>';
                 }
                 html += '</div>';
             }
             if (data.success) {
-                toastr.success(data.success);
-                $('#employee_type_form_edit')[0].reset();
-                $('#employeeTypeEditModal').modal('hide');
-                $('#employee_type-table').DataTable().ajax.reload();
+                html = '<div class="alert alert-success">' + data.success + '</div>';
+                $('#employee_reason_form_edit')[0].reset();
+                <!-- $('#employeeReasonEditModal').modal('hide'); -->
+                $('#employee_reason-table').DataTable().ajax.reload();
             }
-            $('.employee_type_result_edit').html(html).slideDown(300).delay(3000).slideUp(300);
+            $('.employee_reason_result_edit').html(html).slideDown(300).delay(3000).slideUp(300);
             setTimeout(function () {
-                $('#employeeTypeEditModal').modal('hide')
-            }, 5000);
+                $('#employeeReasonEditModal').modal('hide')
+            }, 2000);
         }
     });
 });
 
 
 
-$(document).on('click', '.employee_type_delete', function () {
+$(document).on('click', '.employee_reason_delete', function () {
     let delete_id = $(this).attr('id');
-    let target = "{{ route('employee_type.index') }}/" + delete_id + '/delete';
+    let target = "{{ route('employee_reason.index') }}/" + delete_id + '/delete';
     if (confirm('{{__('Are You Sure you want to delete this data')}}')) {
         $.ajax({
             url: target,
             success: function (data) {
                 var html = '';
-                toastr.success(data.success);
+                html = '<div class="alert alert-success">' + data.success + '</div>';
                 setTimeout(function () {
-                    $('#employee_type-table').DataTable().ajax.reload();
+                    $('#employee_reason-table').DataTable().ajax.reload();
                 }, 2000);
-                <!-- $('.employee_type_result').html(html).slideDown(300).delay(3000).slideUp(300); -->
+                $('.employee_reason_result').html(html).slideDown(300).delay(3000).slideUp(300);
             }
         })
     }
 
 });
 
-$('#employee_type_close').on('click', function () {
-    $('#employee_type_form')[0].reset();
-    $('#employee_type-table').DataTable().ajax.reload();
+$('#employee_reason_close').on('click', function () {
+    $('#employee_reason_form')[0].reset();
+    $('#employee_reason-table').DataTable().ajax.reload();
 });

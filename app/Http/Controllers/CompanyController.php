@@ -25,14 +25,14 @@ class CompanyController extends Controller {
 				{
 					return $company->id;
 				})
-				->addColumn('city',function ($row)
-				{
-					return $row->Location->city ?? "" ;
-				})
-				->addColumn('country',function ($row)
-				{
-					return $row->Location->Country->name ?? "" ;
-				})
+				// ->addColumn('city',function ($row)
+				// {
+				// 	return $row->Location->city ?? "" ;
+				// })
+				// ->addColumn('country',function ($row)
+				// {
+				// 	return $row->Location->Country->name ?? "" ;
+				// })
 				->addColumn('action', function ($data)
 				{
 					$button = '<button type="button" name="show" id="' . $data->id . '" class="show_new btn btn-success btn-sm"><i class="dripicons-preview"></i></button>';
@@ -60,15 +60,14 @@ class CompanyController extends Controller {
 	{
 		if(auth()->user()->can('store-company'))
 		{
-			$validator = Validator::make($request->only('company_name', 'company_type_id', 'trading_name', 'registration_no', 'contact_no', 'email', 'website', 'tax_no',
-				'location_id', 'company_logo'),
+			$validator = Validator::make($request->only('company_name'),
 				[
-					'company_name' => 'required|unique:companies,company_name,',
-					'company_type_id' => 'required',
-					'email' => 'email',
-					'contact_no' => 'nullable|numeric',
-					'location_id' => 'required',
-					'company_logo' => 'nullable|image|max:2048|mimes:jpeg,png,jpg,gif'
+					'company_name' => 'required|unique:companies,company_name,'
+					// 'company_type_id' => 'required',
+					// 'email' => 'email',
+					// 'contact_no' => 'nullable|numeric',
+					// 'location_id' => 'required',
+					// 'company_logo' => 'nullable|image|max:2048|mimes:jpeg,png,jpg,gif'
 				]
 			);
 
@@ -80,28 +79,26 @@ class CompanyController extends Controller {
 
 			$data = [];
 			$data['company_name'] = $request->company_name;
-			$data['company_type_id'] = $request->company_type_id;
-			$data['trading_name'] = $request->trading_name;
-			$data['registration_no'] = $request->registration_no;
-			$data['contact_no'] = $request->contact_no;
-			$data['email'] = $request->email;
-			$data['website'] = $request->website;
-			$data['tax_no'] = $request->tax_no;
-			$data['location_id'] = $request->location_id;
+			// $data['company_type_id'] = $request->company_type_id;
+			// $data['trading_name'] = $request->trading_name;
+			// $data['registration_no'] = $request->registration_no;
+			// $data['contact_no'] = $request->contact_no;
+			// $data['email'] = $request->email;
+			// $data['website'] = $request->website;
+			// $data['tax_no'] = $request->tax_no;
+			// $data['location_id'] = $request->location_id;
 
-			$company_logo = $request->company_logo;
+			// $company_logo = $request->company_logo;
 
-			if (isset($company_logo)) {
-				if ($company_logo->isValid()) {
-					$file_name = preg_replace('/\s+/', '', rand()) . '_' . time() . '.' . $company_logo->getClientOriginalExtension();
-					$company_logo->storeAs('company_logo', $file_name);
-					$data['company_logo'] = $file_name;
-				}
-			}
-
+			// if (isset($company_logo)) {
+			// 	if ($company_logo->isValid()) {
+			// 		$file_name = preg_replace('/\s+/', '', rand()) . '_' . time() . '.' . $company_logo->getClientOriginalExtension();
+			// 		$company_logo->storeAs('company_logo', $file_name);
+			// 		$data['company_logo'] = $file_name;
+			// 	}
+			// }
 
 			company::create($data);
-
 
 			return response()->json(['success' => __('Data Added successfully.')]);
 		}
@@ -111,7 +108,7 @@ class CompanyController extends Controller {
 	public function show($id)
 	{
 		if (request()->ajax()) {
-			$data = company::with(['location.country','companyType:id,type_name'])->findOrFail($id);
+			$data = company::findOrFail($id);
 
 			return response()->json(['data' => $data]);
 		}
@@ -143,14 +140,13 @@ class CompanyController extends Controller {
 		{
 			$id = $request->hidden_id;
 
-			$validator = Validator::make($request->only('company_name', 'trading_name', 'registration_no', 'contact_no', 'email', 'website', 'tax_no',
-				'location_id', 'company_logo'),
+			$validator = Validator::make($request->only('company_name'),
 				[
 					'company_name' => 'required|unique:companies,company_name,' . $id,
-					'email' => 'email',
-					'contact_no' => 'nullable|numeric',
-					'location_id' => 'required',
-					'company_logo' => 'nullable|image|max:2048|mimes:jpeg,png,jpg,gif'
+					// 'email' => 'email',
+					// 'contact_no' => 'nullable|numeric',
+					// 'location_id' => 'required',
+					// 'company_logo' => 'nullable|image|max:2048|mimes:jpeg,png,jpg,gif'
 				]
 			);
 
@@ -162,32 +158,32 @@ class CompanyController extends Controller {
 
 			$data = [];
 			$data['company_name'] = $request->company_name;
-			$data['company_type_id'] = $request->company_type_id;
-			$data['trading_name'] = $request->trading_name;
-			$data['registration_no'] = $request->registration_no;
-			$data['contact_no'] = $request->contact_no;
-			$data['email'] = $request->email;
-			$data['website'] = $request->website;
-			$data['tax_no'] = $request->tax_no;
-			$data['location_id'] = $request->location_id;
+			// $data['company_type_id'] = $request->company_type_id;
+			// $data['trading_name'] = $request->trading_name;
+			// $data['registration_no'] = $request->registration_no;
+			// $data['contact_no'] = $request->contact_no;
+			// $data['email'] = $request->email;
+			// $data['website'] = $request->website;
+			// $data['tax_no'] = $request->tax_no;
+			// $data['location_id'] = $request->location_id;
 
-			if ($request->company_type) {
-				$data ['company_type'] = $request->company_type;
-			}
+			// if ($request->company_type) {
+			// 	$data ['company_type'] = $request->company_type;
+			// }
 
 
-			$company_logo = $request->company_logo;
+			// $company_logo = $request->company_logo;
 
-			if (isset($company_logo))
-			{
+			// if (isset($company_logo))
+			// {
 
-				if ($company_logo->isValid())
-				{
-					$file_name = preg_replace('/\s+/', '', rand()) . '_' . time() . '.' . $company_logo->getClientOriginalExtension();
-					$company_logo->storeAs('company_logo', $file_name);
-					$data['company_logo'] = $file_name;
-				}
-			}
+			// 	if ($company_logo->isValid())
+			// 	{
+			// 		$file_name = preg_replace('/\s+/', '', rand()) . '_' . time() . '.' . $company_logo->getClientOriginalExtension();
+			// 		$company_logo->storeAs('company_logo', $file_name);
+			// 		$data['company_logo'] = $file_name;
+			// 	}
+			// }
 			company::whereId($id)->update($data);
 
 			return response()->json(['success' => __('Data is successfully updated')]);

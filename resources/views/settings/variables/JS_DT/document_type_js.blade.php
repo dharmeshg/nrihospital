@@ -85,18 +85,18 @@ data: { document_type:document_type},
 success: function (data) {
 var html = '';
 if (data.errors) {
-html = '<div class="alert alert-danger">';
+<!-- html = '<div class="alert alert-danger">'; -->
     for (var count = 0; count < data.errors.length; count++) {
-    html += '<p>' + data.errors[count] + '</p>';
+    toastr.error(data.errors[count]);
     }
-    html += '</div>';
+    <!-- html += '</div>'; -->
 }
 if (data.success) {
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 $('#document_type_form')[0].reset();
 $('#document_type-table').DataTable().ajax.reload();
 }
-$('.document_result').html(html).slideDown(300).delay(5000).slideUp(300);
+<!-- $('.document_result').html(html).slideDown(300).delay(5000).slideUp(300); -->
 
 }
 });
@@ -134,14 +134,14 @@ data: { document_type_edit:document_type_edit,hidden_document_id:hidden_document
 success: function (data) {
 var html = '';
 if (data.errors) {
-html = '<div class="alert alert-danger">';
+<!-- html = '<div class="alert alert-danger">'; -->
     for (var count = 0; count < data.errors.length; count++) {
-    html += '<p>' + data.errors[count] + '</p>';
+    toastr.error(data.errors[count]);
     }
-    html += '</div>';
+    <!-- html += '</div>'; -->
 }
 if (data.success) {
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 $('#document_type_form_edit')[0].reset();
 $('#document_type-table').DataTable().ajax.reload();
 }
@@ -166,11 +166,11 @@ $.ajax({
 url: target,
 success: function (data) {
 var html = '';
-html = '<div class="alert alert-success">' + data.success + '</div>';
+toastr.success(data.success);
 setTimeout(function () {
 $('#document_type-table').DataTable().ajax.reload();
 }, 2000);
-$('.document_result').html(html).slideDown(300).delay(3000).slideUp(300);
+<!-- $('.document_result').html(html).slideDown(300).delay(3000).slideUp(300); -->
 
 }
 })
